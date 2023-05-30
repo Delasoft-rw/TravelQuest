@@ -198,7 +198,7 @@ export default function List({ disable_edit = false, table_data, table_head, sea
                   return (
                     <TableRow
                       hover
-                      key={id}
+                      key={idx}
                       tabIndex={-1}
                       role="checkbox"
                       selected={isItemSelected}
@@ -208,8 +208,8 @@ export default function List({ disable_edit = false, table_data, table_head, sea
                         <Checkbox checked={isItemSelected} onClick={() => handleClick(id)} />
                       </TableCell>
                       {table_head &&
-                        table_head.map((col) => (
-                          <TableCell align="left">
+                        table_head.map((col, idx) => (
+                          <TableCell key={idx} align="left">
                             <Typography variant="p" noWrap>
                               {col.id === 'createdAt' ? (
                                 <Moment date={row[col.id]} fromNow />

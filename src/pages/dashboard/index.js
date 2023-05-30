@@ -54,7 +54,7 @@ const DashboardDefault = () => {
                 <Analytics title="Monthly earnings" count="30" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Anual earnings" count="50,000 RWF" />
+                <Analytics title="Anual earnings" count="1,000,000 RWF" />
             </Grid>
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
             {/* row 2 */}
@@ -103,7 +103,7 @@ const DashboardDefault = () => {
                             <Typography variant="h6" color="textSecondary">
                                 This Week Statistics
                             </Typography>
-                            <Typography variant="h3">500,000 RWF</Typography>
+                            <Typography variant="h3">300,000 RWF</Typography>
                         </Stack>
                     </Box>
                     <MonthlyBarChart />
