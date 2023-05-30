@@ -23,15 +23,15 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project import
-import AnimateButton from 'components/@extended/AnimateButton';
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
+import AnimateButton from '../../components/@extended/AnimateButton';
+import { strengthColor, strengthIndicator } from '../../utils/password-strength';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import Iconify from 'components/Iconify';
+import Iconify from '../../components/Iconify';
 
 
-const ReceptionistForm = ({ toggleModal, action }) => {
+const ClientsForm = ({ toggleModal, action }) => {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -56,7 +56,7 @@ const ReceptionistForm = ({ toggleModal, action }) => {
       <Grid spacing={3}>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
-            <Typography variant="h3">{action} Receptionist</Typography>
+            <Typography variant="h3">{action} Client</Typography>
             <Typography onClick={toggleModal} variant="h3"><Iconify color="red" icon={'eva:close-circle-fill'} /></Typography>
           </Stack>
         </Grid>
@@ -246,7 +246,7 @@ const ReceptionistForm = ({ toggleModal, action }) => {
                         variant="contained"
                         color="primary"
                       >
-                        {action} User
+                        {action} Client
                       </Button>
                     </AnimateButton>
                   </Grid>
@@ -260,4 +260,4 @@ const ReceptionistForm = ({ toggleModal, action }) => {
   );
 };
 
-export default ReceptionistForm;
+export default ClientsForm;

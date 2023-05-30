@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 
 // project import
-import Loadable from 'components/Loadable';
-import MainLayout from 'layout/MainLayout';
+import Loadable from '../components/Loadable';
+import MainLayout from '../layout/MainLayout';
 import Agents from "../pages/Agents/Agents";
 import Clients from "../pages/Clients/Clients";
 import Flights from "../pages/Flights/Flights";

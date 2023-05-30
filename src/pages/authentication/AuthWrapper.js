@@ -9,7 +9,7 @@ import Logo from 'components/Logo';
 import AuthFooter from 'components/cards/AuthFooter';
 
 // assets
-import AuthBackground from 'assets/images/auth/AuthBackground';
+import AuthBackground from '../../assets/images/auth/AuthBackground';
 
 // ==============================|| AUTHENTICATION - WRAPPER ||============================== //
 

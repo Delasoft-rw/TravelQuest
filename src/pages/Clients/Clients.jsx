@@ -3,47 +3,64 @@ import List from "../../components/Table/List"
 import { faker } from '@faker-js/faker';
 
 
-function Receptionist() {
+function Clients() {
   const generateUsers = () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const name = faker.person.fullName();
-      const email = faker.internet.email();
-      const phoneNumber = faker.phone.number('+48 91 ### ## ##');
+      const fullName = faker.person.fullName();
+      const phoneNumber1 = faker.phone.number('+250 91 ### ## ##');
+      const phoneNumber2 = faker.phone.number('+250 30 ### ## ##');
+      const personalEmail = faker.internet.email();
+      const workEmail = faker.internet.email();
+      const address = faker.helpers.arrayElement(['Kigali', 'Karongi', 'Muhanga']);;
+      const nationality = faker.helpers.arrayElement(['Rwandan']);;
+      const country = faker.helpers.arrayElement(['Rwanda']);;
+      const placeOfIssue = faker.helpers.arrayElement(['Kigali, Rwanda']);;
       const dob = faker.date.past();
       const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
       const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
       const createdAt = faker.date.past();
-      const status = faker.helpers.arrayElement(['Active', 'Inactive']);
+      const doneBy = faker.helpers.arrayElement(['Aime', 'JC']);
 
       const user = {
         id,
         // avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1',
-        name,
-        email,
-        phoneNumber,
+        fullName,
+        phoneNumber1,
+        phoneNumber2,
+        personalEmail,
+        workEmail,
+        address,
+        nationality,
+        country,
+        placeOfIssue,
         dob,
         gender,
         shift,
         createdAt,
-        status
+        doneBy
       };
       users.push(user);
     }
     return users;
   }
 
-  let searchKey = 'name';
+  let searchKey = 'fullName';
   const table_head = [
-    { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
+    { id: 'fullName', label: 'Full Name', alignRight: false },
+    { id: 'phoneNumber1', label: 'Phone 1', alignRight: false },
+    { id: 'phoneNumber2', label: 'Phone 2', alignRight: false },
+    { id: 'personalEmail', label: 'Personal Email', alignRight: false },
+    { id: 'workEmail', label: 'Work Email', alignRight: false },
+    { id: 'address', label: 'Address', alignRight: false },
+    { id: 'nationality', label: 'Nationality', alignRight: false },
+    { id: 'country', label: 'Country', alignRight: false },
+    { id: 'placeOfIssue', label: 'Place Of Issue', alignRight: false },
     { id: 'dob', label: 'DOB', alignRight: false },
     { id: 'gender', label: 'Gender', alignRight: false },
-    { id: 'shift', label: 'Shift', alignRight: false },
-    { id: 'createdAt', label: 'Started', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
+    { id: 'createdAt', label: 'Added', alignRight: false },
+    { id: 'doneBy', label: 'Done By', alignRight: false },
   ];
 
   return (
@@ -53,4 +70,4 @@ function Receptionist() {
   )
 }
 
-export default Receptionist
+export default Clients

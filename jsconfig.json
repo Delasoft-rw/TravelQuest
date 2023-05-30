@@ -1,9 +1,9 @@
 {
-    "include": ["src/**/*"],
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
-        "allowSyntheticDefaultImports": true,
-        "experimentalDecorators": true
-    }
+        "module": "esnext",
+        "baseUrl": "src"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
 }

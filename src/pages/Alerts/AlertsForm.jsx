@@ -23,15 +23,15 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project import
-import AnimateButton from 'components/@extended/AnimateButton';
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
+import AnimateButton from '../../components/@extended/AnimateButton';
+import { strengthColor, strengthIndicator } from '../../utils/password-strength';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import Iconify from 'components/Iconify';
+import Iconify from '../../components/Iconify';
 
 
-const ReceptionistForm = ({ toggleModal, action }) => {
+const AlertsForm = ({ toggleModal, action }) => {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -260,4 +260,4 @@ const ReceptionistForm = ({ toggleModal, action }) => {
   );
 };
 
-export default ReceptionistForm;
+export default AlertsForm;

@@ -3,7 +3,7 @@ import List from "../../components/Table/List"
 import { faker } from '@faker-js/faker';
 
 
-function Receptionist() {
+function Agents() {
   const generateUsers = () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
@@ -53,4 +53,4 @@ function Receptionist() {
   )
 }
 
-export default Receptionist
+export default Agents

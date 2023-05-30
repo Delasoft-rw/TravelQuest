@@ -10,6 +10,7 @@ function Receptionist() {
       const id = i + 1;
       const name = faker.person.fullName();
       const email = faker.internet.email();
+      const messageTemplate = faker.helpers.arrayElement(["Wishing Birthday", "Flight Reminder", "Wishing Happy Holidays"]);
       const phoneNumber = faker.phone.number('+48 91 ### ## ##');
       const dob = faker.date.past();
       const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
@@ -37,18 +38,16 @@ function Receptionist() {
   let searchKey = 'name';
   const table_head = [
     { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
-    { id: 'dob', label: 'DOB', alignRight: false },
-    { id: 'gender', label: 'Gender', alignRight: false },
-    { id: 'shift', label: 'Shift', alignRight: false },
-    { id: 'createdAt', label: 'Started', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
+    { id: 'title', label: 'Title', alignRight: false },
+    { id: 'body', label: 'Body', alignRight: false },
+    { id: 'timestamp', label: 'Timestamp', alignRight: false },
+    { id: 'doneBy', label: 'Done By', alignRight: false },
   ];
+
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New User'} source_type='receptionist' table_data={generateUsers()} table_head={table_head} />
+      <List search_key={searchKey} add_label={'New Alert'} source_type='alert' breadcrumbTitle= "Message/Call templates" table_data={generateUsers()} table_head={table_head} />
     </>
   )
 }

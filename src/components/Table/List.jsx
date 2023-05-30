@@ -27,14 +27,18 @@ import SearchNotFound from '../SearchNotFound';
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs';
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user/list';
-import Popup from 'components/Modal/Modal';
-import ReceptionistForm from 'pages/Agents/ReceptionistForm';
+import Popup from '../Modal/Modal';
+import ClientsForm from '../../pages/Clients/ClientsForm';
+import FlightsForm from '../../pages/Flights/FlightsForm';
+import AlertsForm from '../../pages/Alerts/AlertsForm';
+import AgentsForm from '../../pages/Agents/AgentsForm';
+import PlanesForm from '../../pages/Planes/PlanesForm';
 
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
 
-export default function List({ disable_edit = false, table_data, table_head, search_key, add_label, source_type }) {
+export default function List({ disable_edit = false, table_data, table_head, search_key, add_label, source_type, breadcrumbTitle }) {
   const theme = useTheme();
 
   const [userList, setUserList] = useState(table_data);
@@ -117,13 +121,13 @@ export default function List({ disable_edit = false, table_data, table_head, sea
   };
 
   const toggleFormModal = () => {
-    setMinutePriceModal(!showMinutePriceModal)
-  }
+    setMinutePriceModal(!showMinutePriceModal);
+  };
 
   return (
     <Container maxWidth={false}>
       <HeaderBreadcrumbs
-        heading={source_type.charAt(0).toUpperCase() + source_type.slice(1) + 's'}
+        heading={breadcrumbTitle ? breadcrumbTitle : source_type.charAt(0).toUpperCase() + source_type.slice(1) + 's'}
         links={[{ name: 'Dashboard', href: '/dashboard' }, { name: source_type }]}
         action={
           <Popup
@@ -135,12 +139,17 @@ export default function List({ disable_edit = false, table_data, table_head, sea
               </Button>
             }
           >
-            {source_type === 'receptionist' ? (
-              <ReceptionistForm action="Add" toggleModal={toggleModal} />
-            ) : source_type === 'agents' ? (
-              <ReceptionistForm action="Add" toggleModal={toggleModal} />
-            ) : null
-            }
+            {source_type === 'agent' ? (
+              <AgentsForm action="Add" toggleModal={toggleModal} />
+            ) : source_type === 'client' ? (
+              <ClientsForm action="Add" toggleModal={toggleModal} />
+            ) : source_type === 'flight' ? (
+              <FlightsForm action="Add" toggleModal={toggleModal} />
+            ) : source_type === 'alert' ? (
+              <AlertsForm action="Add" toggleModal={toggleModal} />
+            ) : source_type === 'plane' ? (
+              <PlanesForm action="Add" toggleModal={toggleModal} />
+            ) : null}
           </Popup>
         }
       />
@@ -206,6 +215,8 @@ export default function List({ disable_edit = false, table_data, table_head, sea
                                 <Moment date={row[col.id]} fromNow />
                               ) : col.id === 'dob' ? (
                                 <Moment date={row[col.id]} format="YYYY/MM/DD" />
+                              ) : col.id === 'timestamp' ? (
+                                <Moment date={row[col.id]} format="YYYY/MM/DD" />
                               ) : (
                                 row[col.id]
                               )}
@@ -215,7 +226,6 @@ export default function List({ disable_edit = false, table_data, table_head, sea
 
                       {!disable_edit && (
                         <TableCell align="right">
-
                           <UserMoreMenu
                             source_type={source_type}
                             onDelete={() => handleDeleteUser(row['id'])}

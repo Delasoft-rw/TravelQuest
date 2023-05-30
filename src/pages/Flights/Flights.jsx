@@ -3,54 +3,51 @@ import List from "../../components/Table/List"
 import { faker } from '@faker-js/faker';
 
 
-function Receptionist() {
+function Flights() {
   const generateUsers = () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const name = faker.person.fullName();
-      const email = faker.internet.email();
-      const phoneNumber = faker.phone.number('+48 91 ### ## ##');
-      const dob = faker.date.past();
-      const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
-      const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
+      const client = faker.person.fullName();
+      const callType = faker.helpers.arrayElement(["Hourly", "30 Minutes", "Daily"]);
+      const messageTemplate = faker.helpers.arrayElement(["Wishing Birthday", "Flight Reminder", "Wishing Happy Holidays"]);
+      const timestamp = faker.date.past();
+      const plane = faker.helpers.arrayElement(['AK45CD', 'RW135TD', '334CDOO']);
+      const ticketId = faker.helpers.arrayElement(['fade44s3dd33f', 'ffceeekk', 'rwwfedemmydex']);
       const createdAt = faker.date.past();
-      const status = faker.helpers.arrayElement(['Active', 'Inactive']);
 
       const user = {
         id,
         // avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1',
-        name,
-        email,
-        phoneNumber,
-        dob,
-        gender,
-        shift,
-        createdAt,
-        status
+        client,
+        callType,
+        messageTemplate,
+        timestamp,
+        plane,
+        ticketId,
+        createdAt
       };
       users.push(user);
     }
     return users;
   }
 
-  let searchKey = 'name';
+  let searchKey = 'client';
   const table_head = [
-    { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
-    { id: 'dob', label: 'DOB', alignRight: false },
-    { id: 'gender', label: 'Gender', alignRight: false },
-    { id: 'shift', label: 'Shift', alignRight: false },
+    { id: 'client', label: 'Client', alignRight: false },
+    { id: 'callType', label: 'Call Type', alignRight: false },
+    { id: 'messageTemplate', label: 'Message Template', alignRight: false },
+    { id: 'timestamp', label: 'Timestamp', alignRight: false },
+    { id: 'plane', label: 'plane', alignRight: false },
+    { id: 'ticketId', label: 'Ticket No.', alignRight: false },
     { id: 'createdAt', label: 'Started', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
   ];
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New User'} source_type='receptionist' table_data={generateUsers()} table_head={table_head} />
+      <List search_key={searchKey} add_label={'New Flight'} source_type='flight' breadcrumbTitle="Flights Schedule" table_data={generateUsers()} table_head={table_head} />
     </>
   )
 }
 
-export default Receptionist
+export default Flights

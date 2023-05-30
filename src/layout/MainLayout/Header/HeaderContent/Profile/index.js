@@ -26,7 +26,6 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
 // assets
-import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -83,7 +82,7 @@ const Profile = () => {
     };
 
     const iconBackColorOpen = 'grey.300';
-
+const avatar1 = 'https://png.pngtree.com/png-clipart/20210520/ourmid/pngtree-small-eye-handsome-boys-colorless-character-avatar-png-image_3286527.jpg';
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
             <ButtonBase

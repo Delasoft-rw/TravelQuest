@@ -9,8 +9,12 @@ import { MenuItem, IconButton } from '@mui/material';
 // components
 import Iconify from '../../../components/Iconify';
 import MenuPopover from '../../../components/MenuPopover';
-import Popup from 'components/Modal/Modal';
-import ReceptionistForm from 'pages/Agents/ReceptionistForm';
+import Popup from '../../../components/Modal/Modal';
+import AlertsForm from '../../../pages/Alerts/AlertsForm';
+import PlanesForm from '../../../pages/Planes/PlanesForm';
+import FlightsForm from '../../../pages/Flights/FlightsForm';
+import ClientsForm from '../../../pages/Clients/ClientsForm';
+import AgentsForm from '../../../pages/Agents/AgentsForm';
 
 // ----------------------------------------------------------------------
 
@@ -75,8 +79,16 @@ export default function UserMoreMenu({ onDelete, userName, source_type }) {
                             </MenuItem>
                         }
                     >
-                        {source_type === 'receptionist' ? (
-                            <ReceptionistForm action="Edit" toggleModal={toggleModal} />
+                        {source_type === 'agent' ? (
+                            <AgentsForm action="Edit" toggleModal={toggleModal} />
+                        ) : source_type === 'client' ? (
+                            <ClientsForm action="Edit" toggleModal={toggleModal} />
+                        ) : source_type === 'flight' ? (
+                            <FlightsForm action="Edit" toggleModal={toggleModal} />
+                        ) : source_type === 'alert' ? (
+                            <AlertsForm action="Edit" toggleModal={toggleModal} />
+                        ) : source_type === 'plane' ? (
+                            <PlanesForm action="Edit" toggleModal={toggleModal} />
                         ) : null}
                     </Popup>
                 </Link>

@@ -7,8 +7,8 @@ import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@mui/
 import IncomeAreaChart from './IncomeAreaChart';
 import MonthlyBarChart from './MonthlyBarChart';
 import SalesColumnChart from './SalesColumnChart';
-import MainCard from 'components/MainCard';
-import Analytics from 'components/cards/statistics/Analytics';
+import MainCard from '../../components/MainCard';
+import Analytics from '../../components/cards/statistics/Analytics';
 
 // sales report status
 const status = [
@@ -38,17 +38,23 @@ const DashboardDefault = () => {
             <Grid item xs={12} sx={{ mb: -2.25 }}>
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
                 <Analytics title="Total Agents" count="15" />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Analytics title="Daily earnings" count="50,000 RWF" />
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+                <Analytics title="Total Clients" count="50" />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Analytics title="Weekly earnings" count="250,000 RWF" />
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+                <Analytics title="Daily Flights" count="30" />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Analytics title="Monthly revenue" count="1,000,000 RWF" />
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+                <Analytics title="Total Flights" count="30" />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+                <Analytics title="Monthly earnings" count="30" />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+                <Analytics title="Anual earnings" count="50,000 RWF" />
             </Grid>
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
             {/* row 2 */}
