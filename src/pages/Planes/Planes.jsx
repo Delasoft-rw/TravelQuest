@@ -3,54 +3,46 @@ import List from "../../components/Table/List"
 import { faker } from '@faker-js/faker';
 
 
-function Receptionist() {
-  const generateUsers = () => {
-    const users = [];
+function Planes() {
+
+  function generateAirplaneName() {
+    const prefix = faker.commerce.productAdjective();
+    const suffix = faker.commerce.productName();
+
+    return `${prefix} ${suffix}`;
+  }
+
+  const generateData = () => {
+    const data = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const name = faker.person.fullName();
-      const email = faker.internet.email();
-      const phoneNumber = faker.phone.number('+48 91 ### ## ##');
-      const dob = faker.date.past();
-      const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
-      const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
-      const createdAt = faker.date.past();
-      const status = faker.helpers.arrayElement(['Active', 'Inactive']);
+      const name = generateAirplaneName();
+      const contact_email = faker.internet.email();
+      const contact_phone = faker.phone.number();
 
-      const user = {
+      const obj = {
         id,
-        // avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1',
         name,
-        email,
-        phoneNumber,
-        dob,
-        gender,
-        shift,
-        createdAt,
-        status
+        contact_email,
+        contact_phone,
       };
-      users.push(user);
+      data.push(obj);
     }
-    return users;
+    return data;
   }
 
   let searchKey = 'name';
   const table_head = [
     { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
-    { id: 'dob', label: 'DOB', alignRight: false },
-    { id: 'gender', label: 'Gender', alignRight: false },
-    { id: 'shift', label: 'Shift', alignRight: false },
-    { id: 'createdAt', label: 'Started', alignRight: false },
-    { id: 'status', label: 'Status', alignRight: false },
+    { id: 'contact_phone', label: 'Contact Phone', alignRight: false },
+    { id: 'contact_email', label: 'Contact Email', alignRight: false },
   ];
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New User'} source_type='receptionist' table_data={generateUsers()} table_head={table_head} />
+      <List search_key={searchKey} add_label={'New Plane'} source_type='plane' breadcrumbTitle="Supported Aeropanes" table_data={generateData()} table_head={table_head} />
     </>
   )
 }
 
-export default Receptionist
+export default Planes

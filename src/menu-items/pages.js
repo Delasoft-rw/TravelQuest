@@ -78,7 +78,7 @@ const pages = {
             id: 'Account',
             title: 'Account',
             type: 'item',
-            url: '/dashboard/alerts',
+            url: '/dashboard/account',
             icon: icons.UserAddOutlined,
             breadcrumbs: false
             // target: true

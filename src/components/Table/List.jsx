@@ -216,7 +216,7 @@ export default function List({ disable_edit = false, table_data, table_head, sea
                               ) : col.id === 'dob' ? (
                                 <Moment date={row[col.id]} format="YYYY/MM/DD" />
                               ) : col.id === 'timestamp' ? (
-                                <Moment date={row[col.id]} format="YYYY/MM/DD" />
+                                    <Moment date={row[col.id]} local />
                               ) : (
                                 row[col.id]
                               )}

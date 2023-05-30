@@ -56,7 +56,7 @@ const PlanesForm = ({ toggleModal, action }) => {
       <Grid spacing={3}>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
-            <Typography variant="h3">{action} Receptionist</Typography>
+            <Typography variant="h3">{action} Plane</Typography>
             <Typography onClick={toggleModal} variant="h3"><Iconify color="red" icon={'eva:close-circle-fill'} /></Typography>
           </Stack>
         </Grid>
@@ -178,58 +178,6 @@ const PlanesForm = ({ toggleModal, action }) => {
                       )}
                     </Stack>
                   </Grid>
-                  {action === "Add" && (
-                    <Grid item xs={12}>
-                      <Stack spacing={1}>
-                        <InputLabel htmlFor="password-signup">Password</InputLabel>
-                        <OutlinedInput
-                          fullWidth
-                          error={Boolean(touched.password && errors.password)}
-                          id="password-signup"
-                          type={showPassword ? 'text' : 'password'}
-                          value={values.password}
-                          name="password"
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            handleChange(e);
-                            changePassword(e.target.value);
-                          }}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                size="large"
-                              >
-                                {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                          placeholder="******"
-                          inputProps={{}}
-                        />
-                        {touched.password && errors.password && (
-                          <FormHelperText error id="helper-text-password-signup">
-                            {errors.password}
-                          </FormHelperText>
-                        )}
-                      </Stack>
-                      <FormControl fullWidth sx={{ mt: 2 }}>
-                        <Grid container spacing={2} alignItems="center">
-                          <Grid item>
-                            <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                          </Grid>
-                          <Grid item>
-                            <Typography variant="subtitle1" fontSize="0.75rem">
-                              {level?.label}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </FormControl>
-                    </Grid>
-                  )}
                   {errors.submit && (
                     <Grid item xs={12}>
                       <FormHelperText error>{errors.submit}</FormHelperText>
@@ -246,7 +194,7 @@ const PlanesForm = ({ toggleModal, action }) => {
                         variant="contained"
                         color="primary"
                       >
-                        {action} User
+                        {action} Plane
                       </Button>
                     </AnimateButton>
                   </Grid>

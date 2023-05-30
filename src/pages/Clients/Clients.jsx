@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 
 
 function Clients() {
-  const generateUsers = () => {
+  const generateData = () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
@@ -65,7 +65,7 @@ function Clients() {
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New Client'} source_type='client' table_data={generateUsers()} table_head={table_head} />
+      <List search_key={searchKey} add_label={'New Client'} source_type='client' table_data={generateData()} table_head={table_head} />
     </>
   )
 }

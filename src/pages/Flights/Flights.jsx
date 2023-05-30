@@ -4,17 +4,16 @@ import { faker } from '@faker-js/faker';
 
 
 function Flights() {
-  const generateUsers = () => {
+  const generateData = () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
       const client = faker.person.fullName();
       const callType = faker.helpers.arrayElement(["Hourly", "30 Minutes", "Daily"]);
       const messageTemplate = faker.helpers.arrayElement(["Wishing Birthday", "Flight Reminder", "Wishing Happy Holidays"]);
-      const timestamp = faker.date.past();
+      const timestamp = faker.date.anytime();
       const plane = faker.helpers.arrayElement(['AK45CD', 'RW135TD', '334CDOO']);
       const ticketId = faker.helpers.arrayElement(['fade44s3dd33f', 'ffceeekk', 'rwwfedemmydex']);
-      const createdAt = faker.date.past();
 
       const user = {
         id,
@@ -25,7 +24,6 @@ function Flights() {
         timestamp,
         plane,
         ticketId,
-        createdAt
       };
       users.push(user);
     }
@@ -40,12 +38,11 @@ function Flights() {
     { id: 'timestamp', label: 'Timestamp', alignRight: false },
     { id: 'plane', label: 'plane', alignRight: false },
     { id: 'ticketId', label: 'Ticket No.', alignRight: false },
-    { id: 'createdAt', label: 'Started', alignRight: false },
   ];
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New Flight'} source_type='flight' breadcrumbTitle="Flights Schedule" table_data={generateUsers()} table_head={table_head} />
+      <List search_key={searchKey} add_label={'New Flight'} source_type='flight' breadcrumbTitle="Flights Schedule" table_data={generateData()} table_head={table_head} />
     </>
   )
 }
