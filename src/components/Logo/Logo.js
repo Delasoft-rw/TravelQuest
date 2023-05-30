@@ -5,4 +5,3 @@ const Logo = () => {
 };
 
 export default Logo;
-o
