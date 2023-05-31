@@ -10,18 +10,18 @@ const RootStyle = styled('span')(({ theme, ownerState }) => {
 
     const styleFilled = (color) => ({
         color: theme.palette[color].contrastText,
-        backgroundColor: '#1890ff'
+        backgroundColor: '#86162C'
     });
 
     const styleOutlined = (color) => ({
-        color: '#1890ff',
+        color: '#86162C',
         backgroundColor: 'transparent',
-        border: `1px solid #1890ff`
+        border: `1px solid #86162C`
     });
 
     const styleGhost = (color) => ({
         color: 'light',
-        backgroundColor: alpha('#1890ff', 0.16)
+        backgroundColor: alpha('#86162C', 0.16)
     });
 
     return {

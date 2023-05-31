@@ -32,6 +32,22 @@ const Palette = (mode) => {
 
     const paletteColor = ThemeOption(colors);
 
+    const newPaletteColor = {
+        ...paletteColor,
+        primary: {
+            100: '#bae7ff',
+            200: '#91d5ff',
+            400: '#40a9ff',
+            700: '#0050b3',
+            900: '#002766',
+            lighter: '#e6f7ff',
+            light: '#69c0ff',
+            main: '#86162C',
+            dark: '#7c0018',
+            darker: '#003a8c',
+            contrastText: '#fff'
+        }
+    };
     return createTheme({
         palette: {
             mode,
@@ -39,7 +55,7 @@ const Palette = (mode) => {
                 black: '#000',
                 white: '#fff'
             },
-            ...paletteColor,
+            ...newPaletteColor,
             text: {
                 primary: paletteColor.grey[700],
                 secondary: paletteColor.grey[500],
