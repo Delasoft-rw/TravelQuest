@@ -73,7 +73,7 @@ export default function UserMoreMenu({ onDelete, userName, source_type }) {
                         open={showModal}
                         toggleModal={toggleModal}
                         trigger={
-                            <MenuItem>
+                            <MenuItem sx={{ color: 'primary.main'}}>
                                 <Iconify icon={'eva:edit-fill'} sx={{ mr: 2, width: 24, height: 24 }} />
                                 Edit
                             </MenuItem>

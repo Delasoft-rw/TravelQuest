@@ -8,8 +8,8 @@ function Agents() {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const name = faker.person.fullName();
-      const email = faker.internet.email();
+      const name = 'John Doe';
+      const email = 'john.doe@gmail.com';
       const phoneNumber = faker.phone.number('+48 91 ### ## ##');
       const dob = faker.date.past();
       const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);

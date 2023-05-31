@@ -8,7 +8,7 @@ function Flights() {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const client = faker.person.fullName();
+      const client = 'John Doe';
       const callType = faker.helpers.arrayElement(["Hourly", "30 Minutes", "Daily"]);
       const messageTemplate = faker.helpers.arrayElement(["Wishing Birthday", "Flight Reminder", "Wishing Happy Holidays"]);
       const timestamp = faker.date.anytime();

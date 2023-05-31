@@ -8,11 +8,11 @@ function Clients() {
     const users = [];
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
-      const fullName = faker.person.fullName();
+      const fullName = 'John Doe';
       const phoneNumber1 = faker.phone.number('+250 91 ### ## ##');
       const phoneNumber2 = faker.phone.number('+250 30 ### ## ##');
-      const personalEmail = faker.internet.email();
-      const workEmail = faker.internet.email();
+      const personalEmail = 'john.doe@gmail.com';
+      const workEmail = 'john.doe@gmail.com';
       const address = faker.helpers.arrayElement(['Kigali', 'Karongi', 'Muhanga']);;
       const nationality = faker.helpers.arrayElement(['Rwandan']);;
       const country = faker.helpers.arrayElement(['Rwanda']);;
@@ -48,7 +48,7 @@ function Clients() {
 
   let searchKey = 'fullName';
   const table_head = [
-    { id: 'fullName', label: 'Full Name', alignRight: false },
+    { id: 'fullName', label: 'Name', alignRight: false },
     { id: 'phoneNumber1', label: 'Phone 1', alignRight: false },
     { id: 'phoneNumber2', label: 'Phone 2', alignRight: false },
     { id: 'personalEmail', label: 'Personal Email', alignRight: false },

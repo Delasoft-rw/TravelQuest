@@ -17,7 +17,7 @@ function Planes() {
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
       const name = generateAirplaneName();
-      const contact_email = faker.internet.email();
+      const contact_email = 'john.doe@gmail.com';
       const contact_phone = faker.phone.number();
 
       const obj = {
