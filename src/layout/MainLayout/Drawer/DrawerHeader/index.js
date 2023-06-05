@@ -17,7 +17,6 @@ const DrawerHeader = ({ open }) => {
         <DrawerHeaderStyled theme={theme} open={open}>
             <Stack direction="column" spacing={1} alignItems="center">
                 <Logo />
-                {/* <h1>Travel Quest</h1> */}
             </Stack>
         </DrawerHeaderStyled>
     );
