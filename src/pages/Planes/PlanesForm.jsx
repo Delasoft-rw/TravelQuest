@@ -193,6 +193,7 @@ const PlanesForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} Plane
                       </Button>

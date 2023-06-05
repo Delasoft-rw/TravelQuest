@@ -245,6 +245,7 @@ const AgentsForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} Agent
                       </Button>

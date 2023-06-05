@@ -245,6 +245,7 @@ const ReceptionistForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} User
                       </Button>

@@ -245,6 +245,7 @@ const FlightsForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} Flight
                       </Button>

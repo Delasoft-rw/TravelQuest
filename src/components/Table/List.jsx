@@ -134,7 +134,7 @@ export default function List({ disable_edit = false, table_data, table_head, sea
             open={showModal}
             toggleModal={toggleModal}
             trigger={
-              <Button variant="contained" startIcon={<Iconify icon={'eva:plus-fill'} />}>
+              <Button variant="contained" className="bg-primary" startIcon={<Iconify icon={'eva:plus-fill'} />}>
                 {add_label}
               </Button>
             }

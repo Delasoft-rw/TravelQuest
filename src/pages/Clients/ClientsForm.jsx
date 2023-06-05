@@ -245,6 +245,7 @@ const ClientsForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} Client
                       </Button>

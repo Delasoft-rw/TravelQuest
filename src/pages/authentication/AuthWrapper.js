@@ -5,29 +5,21 @@ import { Box, Grid } from '@mui/material';
 
 // project import
 import AuthCard from './AuthCard';
-import Logo from 'components/Logo';
-import AuthFooter from 'components/cards/AuthFooter';
+import { ReactSVG } from 'react-svg';
 
 // assets
-import AuthBackground from '../../assets/images/auth/AuthBackground';
+import LoginSvg  from 'assets/images/undraw_unlock_re_a558.svg';
 
 // ==============================|| AUTHENTICATION - WRAPPER ||============================== //
 
 const AuthWrapper = ({ children }) => (
-    <Box sx={{ minHeight: '100vh' }}>
-        <AuthBackground />
-        <Grid
-            container
-            direction="column"
-            justifyContent="flex-end"
-            sx={{
-                minHeight: '100vh'
-            }}
-        >
-            <Grid item xs={12} sx={{ ml: 3, mt: 3 }}>
-                <Logo />
-            </Grid>
-            <Grid item xs={12}>
+    <>
+        <div className="flex align-center justify-center">
+            <div className="hidden md:flex w-1/2 h-screen bg-white items-center justify-center gap-10 flex-col">
+                <h2 className='text-xl text-gray-700 font-medium font-inter'>Almost there, <br /> Enter your credentials to have access.</h2>
+                <ReactSVG src={LoginSvg} className="" />
+            </div>
+            <div className="w-full md:w-1/2 h-screen bg-primary flex align-center justify-center flex-col">
                 <Grid
                     item
                     xs={12}
@@ -40,12 +32,9 @@ const AuthWrapper = ({ children }) => (
                         <AuthCard>{children}</AuthCard>
                     </Grid>
                 </Grid>
-            </Grid>
-            <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                <AuthFooter />
-            </Grid>
-        </Grid>
-    </Box>
+            </div>
+        </div>
+    </>
 );
 
 AuthWrapper.propTypes = {

@@ -175,6 +175,7 @@ const AlertsForm = ({ toggleModal, action }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        className="bg-primary"
                       >
                         {action} Alert
                       </Button>

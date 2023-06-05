@@ -13,6 +13,7 @@ function Agents() {
       const phoneNumber = faker.phone.number('+48 91 ### ## ##');
       const dob = faker.date.past();
       const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
+      const address = faker.helpers.arrayElement(['Musanze']);
       const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
       const status = faker.helpers.arrayElement(['Active', 'Inactive']);
 
@@ -24,6 +25,7 @@ function Agents() {
         phoneNumber,
         dob,
         gender,
+        address,
         shift,
         status
       };

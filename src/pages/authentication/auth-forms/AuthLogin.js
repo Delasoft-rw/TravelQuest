@@ -46,8 +46,8 @@ const AuthLogin = () => {
         <>
             <Formik
                 initialValues={{
-                    email: 'igaimerca@gmail.com',
-                    password: '123456',
+                    email: 'john.doe@gmail.com',
+                    password: 'admin@123',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -146,6 +146,7 @@ const AuthLogin = () => {
                                         variant="body1"
                                         sx={{ textDecoration: 'none' }}
                                         color="primary"
+
                                     >
                                         Forgot Password?
                                     </Typography>
@@ -166,7 +167,7 @@ const AuthLogin = () => {
                                         size="large"
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        className="bg-primary"
                                     >
                                         Login
                                     </Button>

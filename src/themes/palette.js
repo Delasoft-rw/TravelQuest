@@ -45,7 +45,7 @@ const Palette = (mode) => {
             light: '#69c0ff',
             main: '#86162C',
             dark: '#7c0018',
-            darker: '#003a8c',
+            darker: '#7c0018',
             contrastText: '#fff'
         }
     };
