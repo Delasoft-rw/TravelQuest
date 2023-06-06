@@ -9,19 +9,16 @@ function Receptionist() {
     for (let i = 0; i < 10; i++) {
       const id = i + 1;
       const name = faker.helpers.arrayElement(["Wishing Birthday", "Flight Reminder", "Wishing Happy Holidays"]);
-      const title = faker.lorem.lines(1);
-      const body = faker.lorem.lines(3);
-      const timestamp = faker.date.anytime();
-      // const doneBy = faker.helpers.arrayElement(['Aime', 'JC']);
+      const body = `Muraho {{name}}, Reminder for a flight today at 12:00PM. Thanks`;
+      const time = faker.date.anytime();
+      const doneBy = faker.helpers.arrayElement(['John Doe', 'Jane Doe']);
 
       const user = {
         id,
        name,
-       title,
        body,
-       body,
-       timestamp,
-      //  doneBy
+       time,
+       doneBy
       };
       users.push(user);
     }
@@ -31,10 +28,9 @@ function Receptionist() {
   let searchKey = 'name';
   const table_head = [
     { id: 'name', label: 'Name', alignRight: false },
-    { id: 'timestamp', label: 'Timestamp', alignRight: false },
-    // { id: 'doneBy', label: 'Done By', alignRight: false },
-    { id: 'title', label: 'Title', alignRight: false },
+    { id: 'timestamp', label: 'Time', alignRight: false },
     { id: 'body', label: 'Body', alignRight: false },
+    { id: 'doneBy', label: 'Done By', alignRight: false },
   ];
 
 

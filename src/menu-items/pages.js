@@ -58,7 +58,7 @@ const pages = {
         },
         {
             id: 'Planes',
-            title: 'Supported Planes',
+            title: 'Aeropanes',
             type: 'item',
             url: '/dashboard/planes',
             icon: icons.PlaneIcon,

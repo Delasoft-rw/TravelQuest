@@ -3,19 +3,23 @@ import { useState } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination,
-  Box
+    Card,
+    Table,
+    Avatar,
+    Button,
+    Checkbox,
+    TableRow,
+    TableBody,
+    TableCell,
+    Container,
+    Typography,
+    TableContainer,
+    TablePagination,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
 } from '@mui/material';
 import Moment from 'react-moment';
 
@@ -38,262 +42,275 @@ import PlanesForm from '../../pages/Planes/PlanesForm';
 
 // ----------------------------------------------------------------------
 
-export default function List({ disable_edit = false, table_data, table_head, search_key, add_label, source_type, breadcrumbTitle }) {
-  const theme = useTheme();
+export default function List({
+    disable_edit = false,
+    table_data,
+    table_head,
+    search_key,
+    add_label,
+    source_type,
+    breadcrumbTitle,
+    currentTable,
+    onTableChange
+}) {
+    const theme = useTheme();
 
-  const [userList, setUserList] = useState(table_data);
+    const [userList, setUserList] = useState(table_data);
 
-  const [page, setPage] = useState(0);
+    const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+    const [order, setOrder] = useState('asc');
 
-  const [showModal, setShowModal] = useState(false);
-  const [showMinutePriceModal, setMinutePriceModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [showMinutePriceModal, setMinutePriceModal] = useState(false);
 
-  const [selected, setSelected] = useState([]);
+    const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('name');
+    const [orderBy, setOrderBy] = useState('name');
 
-  const [filterName, setFilterName] = useState('');
+    const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+    const handleRequestSort = (property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
-  const handleSelectAllClick = (checked) => {
-    if (checked) {
-      const newSelecteds = userList.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleFilterByName = (filterName) => {
-    setFilterName(filterName);
-    setPage(0);
-  };
-
-  const handleDeleteUser = (userId) => {
-    const deleteUser = userList.filter((user) => user.id !== userId);
-    setSelected([]);
-    setUserList(deleteUser);
-  };
-
-  const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userList.filter((user) => !selected.includes(user.id));
-    setSelected([]);
-    setUserList(deleteUsers);
-  };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
-
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName, search_key);
-
-  const isNotFound = !filteredUsers.length && Boolean(filterName);
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const toggleFormModal = () => {
-    setMinutePriceModal(!showMinutePriceModal);
-  };
-
-  return (
-    <Container maxWidth={false}>
-      <HeaderBreadcrumbs
-        heading={breadcrumbTitle ? breadcrumbTitle : source_type.charAt(0).toUpperCase() + source_type.slice(1) + 's'}
-        links={[{ name: 'Dashboard', href: '/dashboard' }, { name: source_type }]}
-        action={
-          <Popup
-            open={showModal}
-            toggleModal={toggleModal}
-            trigger={
-              <Button variant="contained" className="bg-primary" startIcon={<Iconify icon={'eva:plus-fill'} />}>
-                {add_label}
-              </Button>
-            }
-          >
-            {source_type === 'agent' ? (
-              <AgentsForm action="Add" toggleModal={toggleModal} />
-            ) : source_type === 'client' ? (
-              <ClientsForm action="Add" toggleModal={toggleModal} />
-            ) : source_type === 'flight' ? (
-              <FlightsForm action="Add" toggleModal={toggleModal} />
-            ) : source_type === 'alert' ? (
-              <AlertsForm action="Add" toggleModal={toggleModal} />
-            ) : source_type === 'plane' ? (
-              <PlanesForm action="Add" toggleModal={toggleModal} />
-            ) : null}
-          </Popup>
+    const handleSelectAllClick = (checked) => {
+        if (checked) {
+            const newSelecteds = userList.map((n) => n.id);
+            setSelected(newSelecteds);
+            return;
         }
-      />
+        setSelected([]);
+    };
 
-      <Card>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-          <Box sx={{ flexGrow: 6 }}>
-            <UserListToolbar
-              numSelected={selected.length}
-              filterName={filterName}
-              onFilterName={handleFilterByName}
-              onDeleteUsers={() => handleDeleteMultiUser(selected)}
+    const handleClick = (id) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected = [];
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+        }
+        setSelected(newSelected);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleFilterByName = (filterName) => {
+        setFilterName(filterName);
+        setPage(0);
+    };
+
+    const handleDeleteUser = (userId) => {
+        const deleteUser = userList.filter((user) => user.id !== userId);
+        setSelected([]);
+        setUserList(deleteUser);
+    };
+
+    const handleDeleteMultiUser = (selected) => {
+        const deleteUsers = userList.filter((user) => !selected.includes(user.id));
+        setSelected([]);
+        setUserList(deleteUsers);
+    };
+
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+
+    const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName, search_key);
+
+    const isNotFound = !filteredUsers.length && Boolean(filterName);
+
+    const toggleModal = () => {
+        setShowModal(!showModal);
+    };
+    return (
+        <Container maxWidth={false}>
+            <HeaderBreadcrumbs
+                heading={breadcrumbTitle ? breadcrumbTitle : source_type.charAt(0).toUpperCase() + source_type.slice(1) + 's'}
+                links={[{ name: 'Dashboard', href: '/dashboard' }, { name: source_type }]}
+                action={
+                    <>
+                        <Popup
+                            open={showModal}
+                            toggleModal={toggleModal}
+                            trigger={
+                                <Button variant="contained" className="bg-primary" startIcon={<Iconify icon={'eva:plus-fill'} />}>
+                                    {add_label}
+                                </Button>
+                            }
+                        >
+                            {source_type === 'agent' ? (
+                                <AgentsForm action="Add" toggleModal={toggleModal} />
+                            ) : source_type === 'client' ? (
+                                <ClientsForm action="Add" toggleModal={toggleModal} />
+                            ) : source_type === 'flight' ? (
+                                <FlightsForm action="Add" toggleModal={toggleModal} />
+                            ) : source_type === 'alert' ? (
+                                <AlertsForm action="Add" toggleModal={toggleModal} />
+                            ) : source_type === 'plane' ? (
+                                <PlanesForm action="Add" toggleModal={toggleModal} />
+                            ) : null}
+                        </Popup>
+                    </>
+                }
             />
-          </Box>
-          {/* {source_type === "pricing" && <Box sx={{ flexGrow: 0.5 }}><Popup
-            open={showMinutePriceModal}
-            toggleModal={toggleFormModal}
-            trigger={
-              <Button variant="contained" startIcon={<Iconify icon={'eva:edit-fill'} />}>
-                Set Price Per Minute
-              </Button>
-            }
-          >
-            <PricePerMinute action="Edit" toggleModal={toggleFormModal} />
-          </Popup></Box>} */}
-        </Box>
 
-        <Scrollbar>
-          <TableContainer sx={{ minWidth: 800 }}>
-            <Table>
-              <UserListHead
-                order={order}
-                orderBy={orderBy}
-                headLabel={table_head}
-                rowCount={userList.length}
-                numSelected={selected.length}
-                onRequestSort={handleRequestSort}
-                onSelectAllClick={handleSelectAllClick}
-              />
-              <TableBody>
-                {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
-                  const { id } = row;
-                  // const { id, avatarUrl, name, email, phoneNumber, dob, gender, shift, createdAt, status } = row;
-                  const isItemSelected = selected.indexOf(id) !== -1;
+            <Card>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Box sx={{ flexGrow: 6 }}>
+                        <UserListToolbar
+                            numSelected={selected.length}
+                            filterName={filterName}
+                            onFilterName={handleFilterByName}
+                            onDeleteUsers={() => handleDeleteMultiUser(selected)}
+                        />
+                    </Box>
+                    {source_type === 'plane' && (
+                        <Box sx={{ flexGrow: 0.5 }}>
+                            <FormControl>
+                                <InputLabel id="select-label">Table</InputLabel>
+                                <Select
+                                    labelId="select-label"
+                                    id="demo-simple-select"
+                                    value={currentTable}
+                                    label="Age"
+                                    onChange={(e) => onTableChange(e.target.value)}
+                                >
+                                    <MenuItem value={'aeroplanes'}>Supported Aeroplanes</MenuItem>
+                                    <MenuItem value={'companies'}>Aeroplane companies</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    )}
+                </Box>
 
-                  return (
-                    <TableRow
-                      hover
-                      key={idx}
-                      tabIndex={-1}
-                      role="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isItemSelected} onClick={() => handleClick(id)} />
-                      </TableCell>
-                      {table_head &&
-                        table_head.map((col, idx) => (
-                          <TableCell key={idx} align="left">
-                            <Typography variant="p" noWrap>
-                              {col.id === 'createdAt' ? (
-                                <Moment date={row[col.id]} fromNow />
-                              ) : col.id === 'dob' ? (
-                                <Moment date={row[col.id]} format="YYYY/MM/DD" />
-                              ) : col.id === 'timestamp' ? (
-                                    <Moment date={row[col.id]} local />
-                              ) : (
-                                row[col.id]
-                              )}
-                            </Typography>
-                          </TableCell>
-                        ))}
+                <Scrollbar>
+                    <TableContainer sx={{ minWidth: 800 }}>
+                        <Table>
+                            <UserListHead
+                                order={order}
+                                orderBy={orderBy}
+                                headLabel={table_head}
+                                rowCount={userList.length}
+                                numSelected={selected.length}
+                                onRequestSort={handleRequestSort}
+                                onSelectAllClick={handleSelectAllClick}
+                            />
+                            <TableBody>
+                                {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
+                                    const { id } = row;
+                                    // const { id, avatarUrl, name, email, phoneNumber, dob, gender, shift, createdAt, status } = row;
+                                    const isItemSelected = selected.indexOf(id) !== -1;
 
-                      {!disable_edit && (
-                        <TableCell align="right">
-                          <UserMoreMenu
-                            source_type={source_type}
-                            onDelete={() => handleDeleteUser(row['id'])}
-                            userName={row[search_key]}
-                          />
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-              {isNotFound && (
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="center" colSpan={12} sx={{ py: 3 }}>
-                      <SearchNotFound searchQuery={filterName} />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              )}
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                                    return (
+                                        <TableRow
+                                            hover
+                                            key={idx}
+                                            tabIndex={-1}
+                                            role="checkbox"
+                                            selected={isItemSelected}
+                                            aria-checked={isItemSelected}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox checked={isItemSelected} onClick={() => handleClick(id)} />
+                                            </TableCell>
+                                            {table_head &&
+                                                table_head.map((col, idx) => (
+                                                    <TableCell key={idx} align="left">
+                                                        <Typography variant="p" noWrap>
+                                                            {col.id === 'createdAt' ? (
+                                                                <Moment date={row[col.id]} fromNow />
+                                                            ) : col.id === 'dob' ? (
+                                                                <Moment date={row[col.id]} format="YYYY/MM/DD" />
+                                                            ) : col.id === 'timestamp' ? (
+                                                                <Moment date={row[col.id]} local />
+                                                            ) : (
+                                                                row[col.id]
+                                                            )}
+                                                        </Typography>
+                                                    </TableCell>
+                                                ))}
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={userList.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(e, page) => setPage(page)}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
-    </Container>
-  );
+                                            {!disable_edit && (
+                                                <TableCell align="right">
+                                                    <UserMoreMenu
+                                                        source_type={source_type}
+                                                        onDelete={() => handleDeleteUser(row['id'])}
+                                                        userName={row[search_key]}
+                                                    />
+                                                </TableCell>
+                                            )}
+                                        </TableRow>
+                                    );
+                                })}
+                                {emptyRows > 0 && (
+                                    <TableRow style={{ height: 53 * emptyRows }}>
+                                        <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                            {isNotFound && (
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell align="center" colSpan={12} sx={{ py: 3 }}>
+                                            <SearchNotFound searchQuery={filterName} />
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            )}
+                        </Table>
+                    </TableContainer>
+                </Scrollbar>
+
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={userList.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={(e, page) => setPage(page)}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Card>
+        </Container>
+    );
 }
 
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
+    if (b[orderBy] < a[orderBy]) {
+        return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+        return 1;
+    }
+    return 0;
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function applySortFilter(array, comparator, query, search_key) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return array.filter((_user) => _user[search_key].toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0]);
+        if (order !== 0) return order;
+        return a[1] - b[1];
+    });
+    if (query) {
+        return array.filter((_user) => _user[search_key].toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    }
+    return stabilizedThis.map((el) => el[0]);
 }
