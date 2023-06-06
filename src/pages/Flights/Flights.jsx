@@ -35,8 +35,8 @@ function Flights() {
     { id: 'client', label: 'Client', alignRight: false },
     { id: 'callType', label: 'Call Type', alignRight: false },
     { id: 'messageTemplate', label: 'Message Template', alignRight: false },
-    { id: 'timestamp', label: 'Timestamp', alignRight: false },
-    { id: 'plane', label: 'plane', alignRight: false },
+    { id: 'timestamp', label: 'Time Of Departure', alignRight: false },
+    { id: 'plane', label: 'Plane', alignRight: false },
     { id: 'ticketId', label: 'Ticket No.', alignRight: false },
   ];
 

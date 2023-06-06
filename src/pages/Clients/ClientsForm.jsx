@@ -20,32 +20,11 @@ import { Formik } from 'formik';
 
 // project import
 import AnimateButton from '../../components/@extended/AnimateButton';
-import { strengthColor, strengthIndicator } from '../../utils/password-strength';
 
 // assets
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
 
 const ClientsForm = ({ toggleModal, action }) => {
-    const [level, setLevel] = useState();
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const changePassword = (value) => {
-        const temp = strengthIndicator(value);
-        setLevel(strengthColor(temp));
-    };
-
-    useEffect(() => {
-        changePassword('');
-    }, []);
-
     return (
         <>
             <Grid spacing={3}>
@@ -76,7 +55,6 @@ const ClientsForm = ({ toggleModal, action }) => {
                         validationSchema={Yup.object().shape({
                             name: Yup.string().max(255).required('First Name is required'),
                             email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                            password: Yup.string().max(255).required('Password is required')
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                             try {
