@@ -248,27 +248,28 @@ export default function List({
                                             {table_head &&
                                                 table_head.map((col, idx) => (
                                                     <>
-                                                        {source_type === 'agent' && col.id === 'name' && (
+                                                        {source_type === 'agent' && col.id === 'name' ? (
                                                             <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
                                                                 <Avatar alt={'agent avatar'} src={row['avatarUrl']} sx={{ mr: 2 }} />
                                                                 <Typography variant="p" noWrap>
                                                                     {row[col.id]}
                                                                 </Typography>
                                                             </TableCell>
-                                                        )}
-                                                        <TableCell key={idx} align="left">
+                                                        ) : (
+                                                          <TableCell key={idx} align="left">
                                                             <Typography variant="p" noWrap>
                                                                 {col.id === 'createdAt' ? (
-                                                                    <Moment date={row[col.id]} fromNow />
-                                                                ) : col.id === 'dob' ? (
+                                                                  <Moment date={row[col.id]} fromNow />
+                                                                  ) : col.id === 'dob' ? (
                                                                     <Moment date={row[col.id]} format="YYYY/MM/DD" />
                                                                 ) : col.id === 'timestamp' ? (
-                                                                    <Moment date={row[col.id]} local />
+                                                                  <Moment date={row[col.id]} local />
                                                                 ) : (
-                                                                    row[col.id]
+                                                                  row[col.id]
                                                                 )}
                                                             </Typography>
                                                         </TableCell>
+                                                                  )}
                                                     </>
                                                 ))}
 
