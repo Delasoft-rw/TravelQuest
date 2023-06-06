@@ -3,13 +3,13 @@ import { lazy } from 'react';
 // project import
 import Loadable from '../components/Loadable';
 import MainLayout from '../layout/MainLayout';
-import Agents from "../pages/Agents/Agents";
-import Clients from "../pages/Clients/Clients";
-import Flights from "../pages/Flights/Flights";
-import Alerts from "../pages/Alerts/Alerts";
-import Planes from "../pages/Planes/Planes";
-import Celebrations from "../pages/Celebrations/Celebrations";
-import Account from "../pages/Account/Account"
+import Agents from '../pages/Agents/Agents';
+import Clients from '../pages/Clients/Clients';
+import Flights from '../pages/Flights/Flights';
+import Alerts from '../pages/Alerts/Alerts';
+import Planes from '../pages/Planes/Planes';
+import Celebrations from '../pages/Celebrations/Celebrations';
+import Account from '../pages/Account/Account';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -46,8 +46,8 @@ const MainRoutes = {
                 {
                     path: 'Alerts',
                     element: <Alerts />
-                },
-{
+                },  
+                {
                     path: 'Planes',
                     element: <Planes />
                 },

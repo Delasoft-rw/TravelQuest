@@ -21,6 +21,7 @@ import {
     Select,
     MenuItem
 } from '@mui/material';
+import pluralize from 'pluralize';
 import Moment from 'react-moment';
 
 // components
@@ -156,9 +157,9 @@ export default function List({
                             ) : source_type === 'flight' ? (
                                 <FlightsForm action="Add" toggleModal={toggleModal} />
                             ) : source_type === 'alert' ? (
-                                <AlertsForm action="Add" toggleModal={toggleModal} />
+                                <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} />
                             ) : source_type === 'plane' ? (
-                                <PlanesForm action="Add" toggleModal={toggleModal} />
+                                <PlanesForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} />
                             ) : null}
                         </Popup>
                     </>
@@ -175,10 +176,12 @@ export default function List({
                             onDeleteUsers={() => handleDeleteMultiUser(selected)}
                         />
                     </Box>
-                    {source_type === 'plane' && (
+                    {source_type === 'plane' ? (
                         <Box sx={{ flexGrow: 0.5 }}>
                             <FormControl>
-                                <InputLabel id="select-label">Table</InputLabel>
+                                <InputLabel id="select-label" className="text-primary font-bold">
+                                    Table
+                                </InputLabel>
                                 <Select
                                     labelId="select-label"
                                     id="demo-simple-select"
@@ -188,6 +191,24 @@ export default function List({
                                 >
                                     <MenuItem value={'aeroplanes'}>Supported Aeroplanes</MenuItem>
                                     <MenuItem value={'companies'}>Aeroplane companies</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    ) : source_type === 'alert' && (
+                        <Box sx={{ flexGrow: 0.5 }}>
+                            <FormControl>
+                                <InputLabel id="select-label" className="text-primary font-bold">
+                                    Choose Table
+                                </InputLabel>
+                                <Select
+                                    labelId="select-label"
+                                    id="demo-simple-select"
+                                    value={currentTable}
+                                    label="Age"
+                                    onChange={(e) => onTableChange(e.target.value)}
+                                >
+                                    <MenuItem value={'call_types'}>Call Types</MenuItem>
+                                    <MenuItem value={'templates'}>Templates</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
@@ -226,24 +247,37 @@ export default function List({
                                             </TableCell>
                                             {table_head &&
                                                 table_head.map((col, idx) => (
-                                                    <TableCell key={idx} align="left">
-                                                        <Typography variant="p" noWrap>
-                                                            {col.id === 'createdAt' ? (
-                                                                <Moment date={row[col.id]} fromNow />
-                                                            ) : col.id === 'dob' ? (
-                                                                <Moment date={row[col.id]} format="YYYY/MM/DD" />
-                                                            ) : col.id === 'timestamp' ? (
-                                                                <Moment date={row[col.id]} local />
-                                                            ) : (
-                                                                row[col.id]
-                                                            )}
-                                                        </Typography>
-                                                    </TableCell>
+                                                    <>
+                                                        {source_type === 'agent' && col.id === 'name' && (
+                                                            <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <Avatar alt={'agent avatar'} src={row['avatarUrl']} sx={{ mr: 2 }} />
+                                                                <Typography variant="p" noWrap>
+                                                                    {row[col.id]}
+                                                                </Typography>
+                                                            </TableCell>
+                                                        )}
+                                                        <TableCell key={idx} align="left">
+                                                            <Typography variant="p" noWrap>
+                                                                {col.id === 'createdAt' ? (
+                                                                    <Moment date={row[col.id]} fromNow />
+                                                                ) : col.id === 'dob' ? (
+                                                                    <Moment date={row[col.id]} format="YYYY/MM/DD" />
+                                                                ) : col.id === 'timestamp' ? (
+                                                                    <Moment date={row[col.id]} local />
+                                                                ) : (
+                                                                    row[col.id]
+                                                                )}
+                                                            </Typography>
+                                                        </TableCell>
+                                                    </>
                                                 ))}
 
                                             {!disable_edit && (
                                                 <TableCell align="right">
                                                     <UserMoreMenu
+                                                        edit_label={currentTable ? `Edit` : 
+                                                      `Edit ${source_type}`}
+                                                        currentTable={currentTable}
                                                         source_type={source_type}
                                                         onDelete={() => handleDeleteUser(row['id'])}
                                                         userName={row[search_key]}

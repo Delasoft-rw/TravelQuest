@@ -31,7 +31,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
 
 
-const AlertsForm = ({ toggleModal, action }) => {
+const AlertsForm = ({ toggleModal, action, action_label, currentTable }) => {
   const [level, setLevel] = useState();
 
   const handleMouseDownPassword = (event) => {
@@ -43,7 +43,7 @@ const AlertsForm = ({ toggleModal, action }) => {
       <Grid spacing={3}>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
-            <Typography variant="h3">{action} Alert</Typography>
+            <Typography variant="h3">{action_label}</Typography>
             <Typography onClick={toggleModal} variant="h3"><Iconify color="red" icon={'eva:close-circle-fill'} /></Typography>
           </Stack>
         </Grid>
@@ -177,7 +177,7 @@ const AlertsForm = ({ toggleModal, action }) => {
                         color="primary"
                         className="bg-primary"
                       >
-                        {action} Alert
+                        Save
                       </Button>
                     </AnimateButton>
                   </Grid>

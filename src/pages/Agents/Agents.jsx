@@ -19,7 +19,7 @@ function Agents() {
 
       const user = {
         id,
-        avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1',
+        avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1', // this can be a cloudinary image url
         name,
         email,
         phoneNumber,

@@ -23,7 +23,7 @@ UserMoreMenu.propTypes = {
     userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, source_type }) {
+export default function UserMoreMenu({ onDelete, userName, source_type, edit_label, currentTable }) {
     const [open, setOpen] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const toggleModal = () => {
@@ -73,7 +73,7 @@ export default function UserMoreMenu({ onDelete, userName, source_type }) {
                         open={showModal}
                         toggleModal={toggleModal}
                         trigger={
-                            <MenuItem sx={{ color: 'primary.main'}}>
+                            <MenuItem sx={{ color: 'primary.main' }}>
                                 <Iconify icon={'eva:edit-fill'} sx={{ mr: 2, width: 24, height: 24 }} />
                                 Edit
                             </MenuItem>
@@ -86,9 +86,9 @@ export default function UserMoreMenu({ onDelete, userName, source_type }) {
                         ) : source_type === 'flight' ? (
                             <FlightsForm action="Edit" toggleModal={toggleModal} />
                         ) : source_type === 'alert' ? (
-                            <AlertsForm action="Edit" toggleModal={toggleModal} />
+                            <AlertsForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
                         ) : source_type === 'plane' ? (
-                            <PlanesForm action="Edit" toggleModal={toggleModal} />
+                            <PlanesForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
                         ) : null}
                     </Popup>
                 </Link>

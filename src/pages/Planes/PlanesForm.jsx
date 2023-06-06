@@ -31,7 +31,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
 
 
-const PlanesForm = ({ toggleModal, action }) => {
+const PlanesForm = ({ toggleModal, action, action_label, currentTable }) => {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -56,7 +56,7 @@ const PlanesForm = ({ toggleModal, action }) => {
       <Grid spacing={3}>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
-            <Typography variant="h3">{action} Plane</Typography>
+            <Typography variant="h3">{action_label}</Typography>
             <Typography onClick={toggleModal} variant="h3"><Iconify color="red" icon={'eva:close-circle-fill'} /></Typography>
           </Stack>
         </Grid>
@@ -195,7 +195,7 @@ const PlanesForm = ({ toggleModal, action }) => {
                         color="primary"
                         className="bg-primary"
                       >
-                        {action} Plane
+                       Save
                       </Button>
                     </AnimateButton>
                   </Grid>
