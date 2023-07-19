@@ -28,6 +28,9 @@ import SettingTab from './SettingTab';
 // assets
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { axios } from 'utils/axios.interceptor';
+import { useSelector } from 'react-redux';
+import { enqueueSnackbar } from 'notistack';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -57,9 +60,25 @@ const Profile = () => {
     const navigate = useNavigate();
     const theme = useTheme();
 
+    const { userInfo } = useSelector((state) => state.menu);
+
     const handleLogout = async () => {
-        // logout
-        navigate('/login');
+        try {
+            await axios.get('/auth/logout', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            localStorage.removeItem('isAuthenticated');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            // logout
+            navigate('/login');
+            enqueueSnackbar('Logout Success', { variant: 'success' });
+        } catch (e) {
+            enqueueSnackbar('Logout Failed', { variant: 'error' });
+            console.log(e.response ? e.response.data.error ?? e.message : 'Something Went Wrong');
+        }
     };
 
     const anchorRef = useRef(null);
@@ -82,7 +101,8 @@ const Profile = () => {
     };
 
     const iconBackColorOpen = 'grey.300';
-const avatar1 = 'https://png.pngtree.com/png-clipart/20210520/ourmid/pngtree-small-eye-handsome-boys-colorless-character-avatar-png-image_3286527.jpg';
+    const avatar1 =
+        'https://png.pngtree.com/png-clipart/20210520/ourmid/pngtree-small-eye-handsome-boys-colorless-character-avatar-png-image_3286527.jpg';
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
             <ButtonBase
@@ -100,7 +120,7 @@ const avatar1 = 'https://png.pngtree.com/png-clipart/20210520/ourmid/pngtree-sma
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
                     <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">John Doe</Typography>
+                    <Typography variant="subtitle1">{userInfo.username}</Typography>
                 </Stack>
             </ButtonBase>
             <Popper
@@ -143,9 +163,9 @@ const avatar1 = 'https://png.pngtree.com/png-clipart/20210520/ourmid/pngtree-sma
                                                     <Stack direction="row" spacing={1.25} alignItems="center">
                                                         <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                                                         <Stack>
-                                                            <Typography variant="h6">John Doe</Typography>
+                                                            <Typography variant="h6">{userInfo.username}</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                Admin
+                                                                {userInfo.roles.map((role) => role.name).join(', ')}
                                                             </Typography>
                                                         </Stack>
                                                     </Stack>

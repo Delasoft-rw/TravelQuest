@@ -25,13 +25,18 @@ import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { CircularProgress } from '@mui/material';
+import { enqueueSnackbar } from 'notistack';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setUserInfo } from 'store/reducers/menu';
+import { axios } from 'utils/axios.interceptor';
 
 const AuthLogin = () => {
     const navigate = useNavigate();
     const [checked, setChecked] = React.useState(true);
-
     const [showPassword, setShowPassword] = React.useState(false);
+    const dispatch = useDispatch();
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -40,30 +45,50 @@ const AuthLogin = () => {
         event.preventDefault();
     };
 
+    const handleOnSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
+        try {
+            setStatus({ success: false });
+            setSubmitting(true);
+            enqueueSnackbar('Logging In...', { variant: 'info' });
+            const { data } = await axios.post('/auth/login', values);
+            if (data.message !== 'success') throw new Error(data.message);
+            localStorage.setItem('isAuthenticated', true);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            dispatch(setUserInfo({ userInfo: data.user }));
+            enqueueSnackbar('Logged In Successfully', { variant: 'success' });
+            console.log(data)
+            // navigate('/');
+        } catch (err) {
+            const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
+            setStatus({ success: false });
+            setErrors({ submit: errMessage });
+            enqueueSnackbar(errMessage, { variant: 'error' });
+        } finally {
+            setStatus({ success: true });
+            setSubmitting(false);
+        }
+    };
+
+    React.useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        if (isAuthenticated) navigate('/');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <Formik
                 initialValues={{
-                    email: 'john.doe@gmail.com',
-                    password: 'admin@123',
+                    email: '',
+                    password: '',
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    try {
-                        localStorage.setItem('isAuthenticated', true);
-                        setStatus({ success: false });
-                        setSubmitting(false);
-                        navigate('/');
-                    } catch (err) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                    }
-                }}
+                onSubmit={handleOnSubmit}
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit}>
@@ -144,7 +169,6 @@ const AuthLogin = () => {
                                         variant="body1"
                                         sx={{ textDecoration: 'none' }}
                                         color="primary"
-
                                     >
                                         Forgot Password?
                                     </Typography>
@@ -161,6 +185,7 @@ const AuthLogin = () => {
                                         disableElevation
                                         disabled={isSubmitting}
                                         onClick={handleSubmit}
+                                        endIcon={isSubmitting && <CircularProgress sx={{ color: 'white' }} size={20} />}
                                         fullWidth
                                         size="large"
                                         type="submit"

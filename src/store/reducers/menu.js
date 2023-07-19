@@ -1,12 +1,14 @@
 // types
 import { createSlice } from '@reduxjs/toolkit';
+import { getUserInfo } from 'utils/index';
 
 // initial state
 const initialState = {
     openItem: ['dashboard'],
     openComponent: 'buttons',
     drawerOpen: false,
-    componentDrawerOpen: true
+    componentDrawerOpen: true,
+    userInfo: getUserInfo()
 };
 
 // ==============================|| SLICE - MENU ||============================== //
@@ -29,10 +31,13 @@ const menu = createSlice({
 
         openComponentDrawer(state, action) {
             state.componentDrawerOpen = action.payload.componentDrawerOpen;
+        },
+        setUserInfo(state, action) {
+            state.userInfo = action.payload.userInfo;
         }
     }
 });
 
 export default menu.reducer;
 
-export const { activeItem, activeComponent, openDrawer, openComponentDrawer } = menu.actions;
+export const { activeItem, activeComponent, openDrawer, openComponentDrawer, setUserInfo } = menu.actions;

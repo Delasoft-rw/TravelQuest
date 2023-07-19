@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+// import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -16,19 +16,20 @@ import App from './App';
 import { store } from './store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import { SnackbarProvider } from 'notistack';
 
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(
-    <StrictMode>
+    <SnackbarProvider>
         <ReduxProvider store={store}>
             <BrowserRouter basename="/">
                 <App />
             </BrowserRouter>
         </ReduxProvider>
-    </StrictMode>
+    </SnackbarProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
