@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import List from '../../components/Table/List';
 import { faker } from '@faker-js/faker';
-import Iconify from 'components/Iconify';
-import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import List from '../../components/Table/List';
 
 function Planes() {
     const [currentTable, setCurrentTable] = useState('aeroplanes');

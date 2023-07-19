@@ -1,43 +1,39 @@
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {
-    Card,
-    Table,
     Avatar,
-    Button,
-    Checkbox,
-    TableRow,
-    TableBody,
-    TableCell,
-    Container,
-    Typography,
-    TableContainer,
-    TablePagination,
     Box,
+    Button,
+    Card,
+    Checkbox,
+    Container,
     FormControl,
     InputLabel,
+    MenuItem,
     Select,
-    MenuItem
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TablePagination,
+    TableRow,
+    Typography
 } from '@mui/material';
-import pluralize from 'pluralize';
 import Moment from 'react-moment';
 
 // components
-import Label from '../Label';
+import HeaderBreadcrumbs from '../HeaderBreadcrumbs';
 import Iconify from '../Iconify';
 import Scrollbar from '../Scrollbar';
 import SearchNotFound from '../SearchNotFound';
-import HeaderBreadcrumbs from '../HeaderBreadcrumbs';
 // sections
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user/list';
-import Popup from '../Modal/Modal';
+import AgentsForm from '../../pages/Agents/AgentsForm';
+import AlertsForm from '../../pages/Alerts/AlertsForm';
 import ClientsForm from '../../pages/Clients/ClientsForm';
 import FlightsForm from '../../pages/Flights/FlightsForm';
-import AlertsForm from '../../pages/Alerts/AlertsForm';
-import AgentsForm from '../../pages/Agents/AgentsForm';
 import PlanesForm from '../../pages/Planes/PlanesForm';
+import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user/list';
+import Popup from '../Modal/Modal';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +50,7 @@ export default function List({
     currentTable,
     onTableChange
 }) {
-    const theme = useTheme();
+    // const theme = useTheme();
 
     const [userList, setUserList] = useState(table_data);
 
@@ -63,7 +59,7 @@ export default function List({
     const [order, setOrder] = useState('asc');
 
     const [showModal, setShowModal] = useState(false);
-    const [showMinutePriceModal, setMinutePriceModal] = useState(false);
+    // const [showMinutePriceModal, setMinutePriceModal] = useState(false);
 
     const [selected, setSelected] = useState([]);
 

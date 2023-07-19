@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 // project import
-import AuthCard from './AuthCard';
 import { ReactSVG } from 'react-svg';
+import AuthCard from './AuthCard';
 
 // assets
-import LoginSvg  from 'assets/images/undraw_unlock_re_a558.svg';
+import LoginSvg from 'assets/images/undraw_unlock_re_a558.svg';
 
 // ==============================|| AUTHENTICATION - WRAPPER ||============================== //
 

@@ -1,33 +1,32 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
 import {
     Box,
     Button,
-    Select,
-    MenuItem,
     FormControl,
     FormHelperText,
     Grid,
     IconButton,
     InputAdornment,
     InputLabel,
+    MenuItem,
     OutlinedInput,
+    Select,
     Stack,
     Typography
 } from '@mui/material';
 
 // third party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 // project import
 import AnimateButton from '../../components/@extended/AnimateButton';
 import { strengthColor, strengthIndicator } from '../../utils/password-strength';
 
 // assets
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
 
 const AgentsForm = ({ toggleModal, action }) => {

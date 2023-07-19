@@ -5,11 +5,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
     Button,
     Checkbox,
-    Divider,
     FormControlLabel,
     FormHelperText,
     Grid,
-    Link,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -19,14 +17,14 @@ import {
 } from '@mui/material';
 
 // third party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const AuthLogin = () => {

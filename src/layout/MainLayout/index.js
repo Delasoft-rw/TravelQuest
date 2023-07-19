@@ -38,6 +38,7 @@ const MainLayout = () => {
         if (!localStorage.getItem('isAuthenticated')) {
             navigate('/login');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // set media wise responsive drawer
