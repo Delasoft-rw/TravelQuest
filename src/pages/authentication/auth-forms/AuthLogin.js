@@ -58,7 +58,7 @@ const AuthLogin = () => {
             dispatch(setUserInfo({ userInfo: data.user }));
             enqueueSnackbar('Logged In Successfully', { variant: 'success' });
             console.log(data)
-            // navigate('/');
+            window.location.pathname = '/'
         } catch (err) {
             const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
             setStatus({ success: false });

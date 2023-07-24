@@ -22,10 +22,10 @@ import AnimateButton from '../../components/@extended/AnimateButton';
 // assets
 import Iconify from '../../components/Iconify';
 
-const ClientsForm = ({ toggleModal, action }) => {
+const ClientsForm = ({ toggleModal, action, initialData }) => {
     return (
         <>
-            <Grid spacing={3}>
+            <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
                         <Typography variant="h3">{action} Client</Typography>
@@ -37,17 +37,17 @@ const ClientsForm = ({ toggleModal, action }) => {
                 <Grid item xs={12}>
                     <Formik
                         initialValues={{
-                            name: '',
-                            phoneNumber1: '',
-                            phoneNumber2: '',
-                            personalEmail: '',
-                            workEmail: '',
-                            address: '',
-                            nationality: '',
-                            placeOfIssue: '',
-                            dob: '',
-                            gender: '',
-                            shift: '',
+                            firstName:  initialData?.firstName ?? '',
+                            lastName:  initialData?.lastName ?? '',
+                            mobileTelephone:  initialData?.mobileTelephone ?? '',
+                            workTelephone:  initialData?.workTelephone ?? '',
+                            workEmail:  initialData?.workEmail ?? '',
+                            address:  initialData?.address ?? '',
+                            nationality:  initialData?.nationality ?? '',
+                            placeOfIssue:  initialData?.placeOfIssue ?? '',
+                            dob:  initialData?.dob ?? '',
+                            gender:  initialData?.gender ?? '',
+                            shift:  initialData?.shift ?? '',
                             submit: null
                         }}
                         validationSchema={Yup.object().shape({

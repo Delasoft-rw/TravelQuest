@@ -28,8 +28,10 @@ import { strengthColor, strengthIndicator } from '../../utils/password-strength'
 // assets
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
+import { CircularProgress, enqueueSnackbar } from 'utils/index';
+import { axios } from 'utils/axios.interceptor';
 
-const AgentsForm = ({ toggleModal, action }) => {
+const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
     const [level, setLevel] = useState();
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -45,13 +47,45 @@ const AgentsForm = ({ toggleModal, action }) => {
         setLevel(strengthColor(temp));
     };
 
+    const handleOnSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
+        console.log('submitting')
+        try {
+            setStatus({ success: false });
+            setSubmitting(true);
+            enqueueSnackbar('Submitting...', { variant: 'info' })
+
+            // const URL = action === 'Add' ? '/auth/add-user' : '/auth/edit-user'
+            // const method = action === 'Add' ? 'post' : 'put'
+            await axios.post('/auth/add-user', {
+                ...values,
+                role_id: 117,
+            })
+
+            enqueueSnackbar('Added Agent', { variant: 'success' })
+
+        } catch (err) {
+            const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
+            console.error(err);
+            setStatus({ success: false });
+            setErrors({ submit: errMessage });
+            enqueueSnackbar(errMessage, { variant: 'error' })
+        } finally {
+            toggleModal();
+            setSubmitting(false);
+            refresh()
+        }
+    }
+
     useEffect(() => {
         changePassword('');
     }, []);
 
     return (
         <>
-            <Grid spacing={3}>
+            <Grid container spacing={3}
+                sx={{
+                    maxHeight: '80vh',
+                }}>
                 <Grid item xs={12}>
                     <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
                         <Typography variant="h3">{action} Agent</Typography>
@@ -60,78 +94,129 @@ const AgentsForm = ({ toggleModal, action }) => {
                         </Typography>
                     </Stack>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ pb: 2 }}>
                     <Formik
                         initialValues={{
-                            name: '',
-                            email: '',
-                            phone: '',
+                            firstName: '',
+                            lastName: '',
+                            address: '',
+                            mobileTelephone: '',
+                            workTelephone: '',
                             dob: '',
                             gender: '',
-                            address: '',
-                            status: 'active',
+                            nationality: '',
+                            nid: '',
+                            passport: '',
+                            language: '',
+                            placeOfIssue: '',
+                            workEmail: '',
+                            password: '',
+                            email: '',
+                            username: '',
                             submit: null
                         }}
                         validationSchema={Yup.object().shape({
-                            name: Yup.string().max(255).required('First Name is required'),
-                            email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                            password: Yup.string().max(255).required('Password is required')
+                            firstName: Yup.string().max(255).required('First Name is required'),
+                            username: Yup.string().max(255).required('username is required'),
+                            lastName: Yup.string().max(255).required('Last Name is required'),
+                            address: Yup.string().max(255).required('Address is required'),
+                            mobileTelephone: Yup.string().max(255).required('Mobile Telephone is required'),
+                            workTelephone: Yup.string().max(255).required('Work Telephone is required'),
+                            dob: Yup.string().max(255).required('Date of Birth is required'),
+                            gender: Yup.string().max(255).required('Gender is required'),
+                            nationality: Yup.string().max(255).required('Nationality is required'),
+                            nid: Yup.string().max(255).required('National ID is required'),
+                            passport: Yup.string().max(255).required('Passport is required'),
+                            language: Yup.string().max(255).required('Language is required'),
+                            placeOfIssue: Yup.string().max(255).required('Place of Issue is required'),
+                            workEmail: Yup.string().email('Must be a valid email').max(255).required('Work Email is required'),
                         })}
-                        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                            try {
-                                setStatus({ success: false });
-                                setSubmitting(false);
-                                toggleModal();
-                            } catch (err) {
-                                console.error(err);
-                                setStatus({ success: false });
-                                setErrors({ submit: err.message });
-                                setSubmitting(false);
-                            }
-                        }}
+                        onSubmit={handleOnSubmit}
                     >
                         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                             <form noValidate onSubmit={handleSubmit}>
-                                <Grid container spacing={3}>
+                                <Grid container spacing={3} >
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="name-signup">Full Name*</InputLabel>
+                                            <InputLabel htmlFor="name-signup">First Name*</InputLabel>
                                             <OutlinedInput
-                                                id="name-login"
+                                                id="firstname-login"
                                                 type="text"
-                                                value={values.name}
-                                                name="name"
+                                                value={values.firstName}
+                                                name="firstName"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder="John"
                                                 fullWidth
-                                                error={Boolean(touched.name && errors.name)}
+                                                error={Boolean(touched.firstName && errors.firstName)}
                                             />
-                                            {touched.name && errors.name && (
+                                            {touched.firstName && errors.firstName && (
                                                 <FormHelperText error id="helper-text-name-signup">
-                                                    {errors.name}
+                                                    {errors.firstName}
                                                 </FormHelperText>
                                             )}
                                         </Stack>
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="email-signup">Email*</InputLabel>
+                                            <InputLabel htmlFor="name-signup">Last Name*</InputLabel>
+                                            <OutlinedInput
+                                                id="lastname-login"
+                                                type="text"
+                                                value={values.lastName}
+                                                name="lastName"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder="John"
+                                                fullWidth
+                                                error={Boolean(touched.lastName && errors.lastName)}
+                                            />
+                                            {touched.lastName && errors.lastName && (
+                                                <FormHelperText error id="helper-text-name-signup">
+                                                    {errors.lastName}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="name-signup">Username*</InputLabel>
+                                            <OutlinedInput
+                                                id="username-login"
+                                                type="text"
+                                                value={values.username}
+                                                name="username"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder="John"
+                                                fullWidth
+                                                error={Boolean(touched.username && errors.username)}
+                                            />
+                                            {touched.username && errors.username && (
+                                                <FormHelperText error id="helper-text-name-signup">
+                                                    {errors.username}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="email-signup">address*</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
-                                                error={Boolean(touched.email && errors.email)}
-                                                id="email-signup"
-                                                type="email"
-                                                value={values.email}
-                                                name="email"
+                                                error={Boolean(touched.address && errors.address)}
+                                                id="address-signup"
+                                                type="text"
+                                                value={values.address}
+                                                name="address"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder="Doe"
                                                 inputProps={{}}
                                             />
-                                            {touched.email && errors.email && (
-                                                <FormHelperText error id="helper-text-email-signup">
-                                                    {errors.email}
+                                            {touched.address && errors.address && (
+                                                <FormHelperText error id="helper-text-address-signup">
+                                                    {errors.address}
                                                 </FormHelperText>
                                             )}
                                         </Stack>
@@ -139,22 +224,44 @@ const AgentsForm = ({ toggleModal, action }) => {
 
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="phone-signup">Phone Number*</InputLabel>
+                                            <InputLabel htmlFor="phone-signup">Mobile Phone Number*</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
-                                                error={Boolean(touched.phone && errors.phone)}
-                                                id="phone-signup"
+                                                error={Boolean(touched.mobileTelephone && errors.mobileTelephone)}
+                                                id="mobileTelephone-signup"
                                                 type="tel"
-                                                value={values.phone}
-                                                name="phone"
+                                                value={values.mobileTelephone}
+                                                name="mobileTelephone"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder=""
                                                 inputProps={{}}
                                             />
-                                            {touched.phone && errors.phone && (
-                                                <FormHelperText error id="helper-text-phone-signup">
-                                                    {errors.phone}
+                                            {touched.mobileTelephone && errors.mobileTelephone && (
+                                                <FormHelperText error id="helper-text-mobileTelephone-signup">
+                                                    {errors.mobileTelephone}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="phone-signup">Work Phone Number*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.workTelephone && errors.workTelephone)}
+                                                id="workTelephone-signup"
+                                                type="tel"
+                                                value={values.workTelephone}
+                                                name="workTelephone"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.workTelephone && errors.workTelephone && (
+                                                <FormHelperText error id="helper-text-workTelephone-signup">
+                                                    {errors.workTelephone}
                                                 </FormHelperText>
                                             )}
                                         </Stack>
@@ -207,22 +314,154 @@ const AgentsForm = ({ toggleModal, action }) => {
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="address">Address*</InputLabel>
+                                            <InputLabel htmlFor="nationality">Nationality*</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
-                                                error={Boolean(touched.address && errors.address)}
-                                                id="address"
+                                                error={Boolean(touched.nationality && errors.nationality)}
+                                                id="nationality"
                                                 type="text"
-                                                value={values.address}
-                                                name="address"
+                                                value={values.nationality}
+                                                name="nationality"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder=""
                                                 inputProps={{}}
                                             />
-                                            {touched.address && errors.address && (
-                                                <FormHelperText error id="helper-text-address-signup">
-                                                    {errors.address}
+                                            {touched.nationality && errors.nationality && (
+                                                <FormHelperText error id="helper-text-nationality-signup">
+                                                    {errors.nationality}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="nid">National ID*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.nid && errors.nid)}
+                                                id="nid"
+                                                type="number"
+                                                value={values.nid}
+                                                name="nid"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.nid && errors.nid && (
+                                                <FormHelperText error id="helper-text-nid-signup">
+                                                    {errors.nid}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="address">Passport*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.passport && errors.passport)}
+                                                id="passport"
+                                                type="text"
+                                                value={values.passport}
+                                                name="passport"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.passport && errors.passport && (
+                                                <FormHelperText error id="helper-text-passport-signup">
+                                                    {errors.passport}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="language">Language*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.language && errors.language)}
+                                                id="language"
+                                                type="text"
+                                                value={values.language}
+                                                name="language"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.language && errors.language && (
+                                                <FormHelperText error id="helper-text-language-signup">
+                                                    {errors.language}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="placeOfIssue">Place Of Issue*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.placeOfIssue && errors.placeOfIssue)}
+                                                id="placeOfIssue"
+                                                type="text"
+                                                value={values.placeOfIssue}
+                                                name="placeOfIssue"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.placeOfIssue && errors.placeOfIssue && (
+                                                <FormHelperText error id="helper-text-placeOfIssue-signup">
+                                                    {errors.placeOfIssue}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="workEmail">Work Email*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.workEmail && errors.workEmail)}
+                                                id="workEmail"
+                                                type="email"
+                                                value={values.workEmail}
+                                                name="workEmail"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.workEmail && errors.workEmail && (
+                                                <FormHelperText error id="helper-text-workEmail-signup">
+                                                    {errors.workEmail}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="email">Email*</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.email && errors.email)}
+                                                id="email"
+                                                type="email"
+                                                value={values.email}
+                                                name="email"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder=""
+                                                inputProps={{}}
+                                            />
+                                            {touched.email && errors.email && (
+                                                <FormHelperText error id="helper-text-email-signup">
+                                                    {errors.email}
                                                 </FormHelperText>
                                             )}
                                         </Stack>
@@ -290,6 +529,7 @@ const AgentsForm = ({ toggleModal, action }) => {
                                                 disableElevation
                                                 disabled={isSubmitting}
                                                 startIcon={<Iconify icon={action === 'add' ? 'eva:plus-fill' : 'eva:edit-fill'} />}
+                                                endIcon={isSubmitting && <CircularProgress />}
                                                 size="large"
                                                 type="submit"
                                                 variant="contained"

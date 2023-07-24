@@ -31,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import { axios } from 'utils/axios.interceptor';
 import { useSelector } from 'react-redux';
 import { enqueueSnackbar } from 'notistack';
+import { handleLogout as _handleLogout } from 'utils/index';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -63,22 +64,10 @@ const Profile = () => {
     const { userInfo } = useSelector((state) => state.menu);
 
     const handleLogout = async () => {
-        try {
-            await axios.get('/auth/logout', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            // logout
-            navigate('/login');
-            enqueueSnackbar('Logout Success', { variant: 'success' });
-        } catch (e) {
-            enqueueSnackbar('Logout Failed', { variant: 'error' });
-            console.log(e.response ? e.response.data.error ?? e.message : 'Something Went Wrong');
-        }
+        await _handleLogout();
+        enqueueSnackbar('Redirecting...', { variant: 'info' });
+        // go to login page
+        navigate('/login');
     };
 
     const anchorRef = useRef(null);

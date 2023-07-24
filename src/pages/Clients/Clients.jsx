@@ -1,71 +1,80 @@
 import React from 'react'
 import List from "../../components/Table/List"
-import { faker } from '@faker-js/faker';
+import { axios } from 'utils/axios.interceptor';
+import { enqueueSnackbar, closeSnackbar } from 'notistack';
+import { Button } from '@mui/material';
 
 
 function Clients() {
-  const generateData = () => {
-    const users = [];
-    for (let i = 0; i < 10; i++) {
-      const id = i + 1;
-      const fullName = 'John Doe';
-      const phoneNumber1 = faker.phone.number('+250 91 ### ## ##');
-      const phoneNumber2 = faker.phone.number('+250 30 ### ## ##');
-      const personalEmail = 'john.doe@gmail.com';
-      const workEmail = 'john.doe@gmail.com';
-      const address = faker.helpers.arrayElement(['Kigali', 'Karongi', 'Muhanga']);;
-      const nationality = faker.helpers.arrayElement(['Rwandan']);;
-      const country = faker.helpers.arrayElement(['Rwanda']);;
-      const placeOfIssue = faker.helpers.arrayElement(['Kigali, Rwanda']);;
-      const dob = faker.date.past();
-      const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
-      const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
-      const createdAt = faker.date.past();
-      const doneBy = faker.helpers.arrayElement(['Aime', 'JC']);
+  const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [key, setKey] = React.useState(null)
 
-      const user = {
-        id,
-        // avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1',
-        fullName,
-        phoneNumber1,
-        phoneNumber2,
-        personalEmail,
-        workEmail,
-        address,
-        nationality,
-        country,
-        placeOfIssue,
-        dob,
-        gender,
-        shift,
-        createdAt,
-        doneBy
-      };
-      users.push(user);
+  const getClients = async () => {
+    setLoading(true)
+    try {
+      const { data } = await axios.get('/auth/all-users', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      console.log(data)
+      setData(data.map(el => ({ ...el })));
+    } catch (e) {
+      console.log(e)
+      enqueueSnackbar('Failed to load clients', {
+        action: () => (<>
+          <Button onClick={() => {
+            getClients()
+          }} >Try Again</Button>
+        </>)
+      })
+    } finally {
+      setLoading(false)
     }
-    return users;
   }
 
   let searchKey = 'fullName';
   const table_head = [
-    { id: 'fullName', label: 'Name', alignRight: false },
-    { id: 'phoneNumber1', label: 'Phone 1', alignRight: false },
-    { id: 'phoneNumber2', label: 'Phone 2', alignRight: false },
+    { id: 'firstName', label: 'First Name', alignRight: false },
+    { id: 'lastName', label: 'Last Name', alignRight: false },
+    { id: 'mobileTelephone', label: 'Mobile Tel.', alignRight: false },
+    { id: 'workTelephone', label: 'Work Tel.', alignRight: false },
     { id: 'personalEmail', label: 'Personal Email', alignRight: false },
     { id: 'workEmail', label: 'Work Email', alignRight: false },
     { id: 'address', label: 'Address', alignRight: false },
+    { id: 'nid', label: 'NID', alignRight: false },
     { id: 'nationality', label: 'Nationality', alignRight: false },
+    { id: 'language', label: 'Language', alignRight: false },
     { id: 'country', label: 'Country', alignRight: false },
     { id: 'placeOfIssue', label: 'Place Of Issue', alignRight: false },
     { id: 'dob', label: 'DOB', alignRight: false },
     { id: 'gender', label: 'Gender', alignRight: false },
+    { id: 'userType', label: 'User Type', alignRight: false },
     { id: 'createdAt', label: 'Added', alignRight: false },
-    { id: 'doneBy', label: 'Done By', alignRight: false },
   ];
+
+  React.useEffect(() => {
+    getClients()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  React.useEffect(() => {
+    if (loading && !key) {
+      setKey(enqueueSnackbar('Loading...', {
+        persist: true,
+      }))
+    } else if (!loading && key) {
+      closeSnackbar(key)
+      setKey(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New Client'} source_type='client' table_data={generateData()} table_head={table_head} />
+      <List refresh={getClients} search_key={searchKey} add_label={'New Client'} source_type='client' table_data={data} table_head={table_head} />
     </>
   )
 }

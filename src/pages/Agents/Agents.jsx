@@ -1,53 +1,78 @@
-import React from 'react'
-import List from "../../components/Table/List"
-import { faker } from '@faker-js/faker';
-
+import { Button } from '@mui/material';
+import React from 'react';
+import { axios } from 'utils/axios.interceptor';
+import { closeSnackbar, enqueueSnackbar } from 'utils/index';
+import List from "../../components/Table/List";
 
 function Agents() {
-  const generateData = () => {
-    const users = [];
-    for (let i = 0; i < 10; i++) {
-      const id = i + 1;
-      const name = 'John Doe';
-      const email = 'john.doe@gmail.com';
-      const phoneNumber = faker.phone.number('+48 91 ### ## ##');
-      const dob = faker.date.past();
-      const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
-      const address = faker.helpers.arrayElement(['Musanze']);
-      const shift = faker.helpers.arrayElement(['Morning', 'Afternoon', 'Evening']);
-      const status = faker.helpers.arrayElement(['Active', 'Inactive']);
+  const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [key, setKey] = React.useState(null)
 
-      const user = {
-        id,
-        avatarUrl: 'https://www.dropbox.com/s/iv3vsr5k6ib2pqx/avatar_default.jpg?dl=1', // this can be a cloudinary image url
-        name,
-        email,
-        phoneNumber,
-        dob,
-        gender,
-        address,
-        shift,
-        status
-      };
-      users.push(user);
+  const getAgents = async () => {
+    setLoading(true)
+    try {
+      const { data } = await axios.get('/auth/all-users')
+
+      console.log(data)
+      setData(data.map(el => ({ ...el })));
+    } catch (e) {
+      console.log(e)
+      enqueueSnackbar('Failed to load clients', {
+        action: () => (<>
+          <Button onClick={() => {
+            getAgents()
+          }} >Try Again</Button>
+        </>)
+      })
+    } finally {
+      setLoading(false)
     }
-    return users;
   }
 
-  let searchKey = 'name';
+  let searchKey = ['firstName', 'lastName', 'address', 'mobileTelephone', 'workTelephone', 'dob', 'gender', 'status', 'nationality', 'country', 'nid', 'passport', 'language', 'placeOfIssue', 'workEmail', 'userType', 'created_at'];
+
   const table_head = [
-    { id: 'name', label: 'Name', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phoneNumber', label: 'Phone', alignRight: false },
-    { id: 'dob', label: 'DOB', alignRight: false },
-    { id: 'gender', label: 'Gender', alignRight: false },
+    { id: 'firstName', label: 'First Name', alignRight: false },
+    { id: 'lastName', label: 'Last Name', alignRight: false },
     { id: 'address', label: 'Address', alignRight: false },
+    { id: 'mobileTelephone', label: 'Mobile Telephone', alignRight: false },
+    { id: 'workTelephone', label: 'Work Telephone', alignRight: false },
+    { id: 'dob', label: 'Date of Birth', alignRight: false },
+    { id: 'gender', label: 'Gender', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
+    { id: 'nationality', label: 'Nationality', alignRight: false },
+    { id: 'country', label: 'Country', alignRight: false },
+    { id: 'nid', label: 'National ID', alignRight: false },
+    { id: 'passport', label: 'Passport', alignRight: false },
+    { id: 'language', label: 'Language', alignRight: false },
+    { id: 'placeOfIssue', label: 'Place of Issue', alignRight: false },
+    { id: 'workEmail', label: 'Work Email', alignRight: false },
+    { id: 'userType', label: 'User Type', alignRight: false },
+    { id: 'created_at', label: 'Created At', alignRight: false },
   ];
+
+  React.useEffect(() => {
+    getAgents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  React.useEffect(() => {
+    if (loading && !key) {
+      setKey(enqueueSnackbar('Loading...', {
+        persist: true,
+      }))
+    } else if (!loading && key) {
+      closeSnackbar(key)
+      setKey(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
+
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New Agent'} source_type='agent' table_data={generateData()} table_head={table_head} />
+      <List refresh={getAgents} search_key={searchKey} add_label={'New Agent'} source_type='agent' table_data={data} table_head={table_head} />
     </>
   )
 }

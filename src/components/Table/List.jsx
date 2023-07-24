@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 // @mui
 import {
     Avatar,
@@ -35,6 +35,9 @@ import PlanesForm from '../../pages/Planes/PlanesForm';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user/list';
 import Popup from '../Modal/Modal';
 
+import { axios } from 'utils/axios.interceptor';
+import { enqueueSnackbar } from 'notistack';
+
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -48,7 +51,8 @@ export default function List({
     source_type,
     breadcrumbTitle,
     currentTable,
-    onTableChange
+    onTableChange,
+    refresh = () => { }
 }) {
     // const theme = useTheme();
 
@@ -109,27 +113,64 @@ export default function List({
         setPage(0);
     };
 
-    const handleDeleteUser = (userId) => {
-        const deleteUser = userList.filter((user) => user.id !== userId);
-        setSelected([]);
-        setUserList(deleteUser);
+    const handleDelete = async (id) => {
+        enqueueSnackbar("Deleting " + source_type, { variant: 'info' })
+        let deleteURI = ''
+        switch (source_type) {
+            case 'agent':
+                deleteURI = `/auth/delete-user/${id}`
+                break;
+            case 'client':
+                deleteURI = `/auth/delete-client/${id}`
+                break;
+            case 'transaction':
+                deleteURI = `/transaction/delete/${id}`
+                break;
+            case 'Product':
+                deleteURI = `/product/delete/${id}`
+                break;
+            case 'PS4 Machine':
+                deleteURI = `/device/delete/${id}`
+                break;
+            case 'pricing':
+                deleteURI = `/price/delete/${id}`
+                break;
+            default:
+                break;
+        }
+
+        try {
+            const { data } = await axios.delete(deleteURI, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                }
+            })
+            enqueueSnackbar(data.message, { variant: 'success' })
+        } catch (e) {
+            enqueueSnackbar(e.response ? e.response.data.message : 'Failed to delete ' + source_type, { variant: 'error' })
+        } finally {
+            refresh()
+        }
     };
 
-    const handleDeleteMultiUser = (selected) => {
-        const deleteUsers = userList.filter((user) => !selected.includes(user.id));
-        setSelected([]);
-        setUserList(deleteUsers);
+    const handleDeleteMultiUser = async (selected) => {
+        for (let user of selected) await handleDelete(user)
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
-    const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName, search_key);
+    const filteredUsers = useMemo(() => applySortFilter(table_data, Array.isArray(search_key) ? [...search_key] : [search_key], filterName), [filterName, table_data, search_key])
 
     const isNotFound = !filteredUsers.length && Boolean(filterName);
+    // const isNotFound = false;
 
     const toggleModal = () => {
         setShowModal(!showModal);
     };
+
+    //   const toggleFormModal = () => {
+    //     setMinutePriceModal(!showMinutePriceModal)
+    //   }
     return (
         <Container maxWidth={false}>
             <HeaderBreadcrumbs
@@ -242,42 +283,41 @@ export default function List({
                                                 <Checkbox checked={isItemSelected} onClick={() => handleClick(id)} />
                                             </TableCell>
                                             {table_head &&
-                                                table_head.map((col, idx) => (
-                                                    <>
-                                                        {source_type === 'agent' && col.id === 'name' ? (
-                                                            <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                                                                <Avatar alt={'agent avatar'} src={row['avatarUrl']} sx={{ mr: 2 }} />
-                                                                <Typography variant="p" noWrap>
-                                                                    {row[col.id]}
-                                                                </Typography>
-                                                            </TableCell>
-                                                        ) : (
-                                                          <TableCell key={idx} align="left">
+                                                table_head.map((col, cell_index) => (
+                                                    source_type === 'agent' && col.id === 'name' ? (
+                                                        <TableCell key={cell_index} sx={{ display: 'flex', alignItems: 'center' }}>
+                                                            <Avatar alt={'agent avatar'} src={row['avatarUrl']} sx={{ mr: 2 }} />
+                                                            <Typography variant="p" noWrap>
+                                                                {row[col.id]}
+                                                            </Typography>
+                                                        </TableCell>
+                                                    ) : (
+                                                        <TableCell key={cell_index} align="left">
                                                             <Typography variant="p" noWrap>
                                                                 {col.id === 'createdAt' ? (
-                                                                  <Moment date={row[col.id]} fromNow />
-                                                                  ) : col.id === 'dob' ? (
+                                                                    <Moment date={row[col.id]} fromNow />
+                                                                ) : col.id === 'dob' ? (
                                                                     <Moment date={row[col.id]} format="YYYY/MM/DD" />
                                                                 ) : col.id === 'timestamp' ? (
-                                                                  <Moment date={row[col.id]} local />
+                                                                    <Moment date={row[col.id]} local />
                                                                 ) : (
-                                                                  row[col.id]
+                                                                    row[col.id]
                                                                 )}
                                                             </Typography>
                                                         </TableCell>
-                                                                  )}
-                                                    </>
+                                                    )
                                                 ))}
 
                                             {!disable_edit && (
                                                 <TableCell align="right">
                                                     <UserMoreMenu
-                                                        edit_label={currentTable ? `Edit` : 
-                                                      `Edit ${source_type}`}
+                                                        edit_label={currentTable ? `Edit` :
+                                                            `Edit ${source_type}`}
                                                         currentTable={currentTable}
                                                         source_type={source_type}
-                                                        onDelete={() => handleDeleteUser(row['id'])}
+                                                        onDelete={() => handleDelete(row['id'])}
                                                         userName={row[search_key]}
+                                                        userInfo={row}
                                                     />
                                                 </TableCell>
                                             )}
@@ -319,29 +359,16 @@ export default function List({
 
 // ----------------------------------------------------------------------
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
+function applySortFilter(data, search_keys, query) {
+    const search_query = query.toLowerCase();
+    if (search_query) {
+        return data.filter((item) => {
+            return search_keys.some(key => {
+                if (item[key] === undefined) return false
+                return item[key].toString().toLowerCase().includes(search_query)
+            })
+        });
     }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
+    return data;
 }
 
-function getComparator(order, orderBy) {
-    return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query, search_key) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    if (query) {
-        return array.filter((_user) => _user[search_key].toLowerCase().indexOf(query.toLowerCase()) !== -1);
-    }
-    return stabilizedThis.map((el) => el[0]);
-}

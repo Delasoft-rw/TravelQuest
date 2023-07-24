@@ -23,7 +23,7 @@ UserMoreMenu.propTypes = {
     userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userName, source_type, edit_label, currentTable }) {
+export default function UserMoreMenu({ onDelete, userInfo, source_type, edit_label, currentTable }) {
     const [open, setOpen] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const toggleModal = () => {
@@ -68,30 +68,32 @@ export default function UserMoreMenu({ onDelete, userName, source_type, edit_lab
                     Delete
                 </MenuItem>
 
-                <Link href={`${'/'}/${paramCase(userName)}/edit`}>
-                    <Popup
-                        open={showModal}
-                        toggleModal={toggleModal}
-                        trigger={
-                            <MenuItem sx={{ color: 'primary.main' }}>
-                                <Iconify icon={'eva:edit-fill'} sx={{ mr: 2, width: 24, height: 24 }} />
-                                Edit
-                            </MenuItem>
-                        }
-                    >
-                        {source_type === 'agent' ? (
-                            <AgentsForm action="Edit" toggleModal={toggleModal} />
-                        ) : source_type === 'client' ? (
-                            <ClientsForm action="Edit" toggleModal={toggleModal} />
-                        ) : source_type === 'flight' ? (
-                            <FlightsForm action="Edit" toggleModal={toggleModal} />
-                        ) : source_type === 'alert' ? (
-                            <AlertsForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
-                        ) : source_type === 'plane' ? (
-                            <PlanesForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
-                        ) : null}
-                    </Popup>
-                </Link>
+                {!['agent'].includes(source_type) && (
+                    <Link href={`#`}>
+                        <Popup
+                            open={showModal}
+                            toggleModal={toggleModal}
+                            trigger={
+                                <MenuItem sx={{ color: 'primary.main' }}>
+                                    <Iconify icon={'eva:edit-fill'} sx={{ mr: 2, width: 24, height: 24 }} />
+                                    Edit
+                                </MenuItem>
+                            }
+                        >
+                            {source_type === 'agent' ? (
+                                <AgentsForm action="Edit" toggleModal={toggleModal} />
+                            ) : source_type === 'client' ? (
+                                <ClientsForm action="Edit" toggleModal={toggleModal} initialData={userInfo} />
+                            ) : source_type === 'flight' ? (
+                                <FlightsForm action="Edit" toggleModal={toggleModal} />
+                            ) : source_type === 'alert' ? (
+                                <AlertsForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
+                            ) : source_type === 'plane' ? (
+                                <PlanesForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
+                            ) : null}
+                        </Popup>
+                    </Link>
+                )}
             </MenuPopover>
         </>
     );
