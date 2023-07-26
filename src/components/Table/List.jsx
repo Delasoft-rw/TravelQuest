@@ -29,14 +29,13 @@ import SearchNotFound from '../SearchNotFound';
 // sections
 import AgentsForm from '../../pages/Agents/AgentsForm';
 import AlertsForm from '../../pages/Alerts/AlertsForm';
-import ClientsForm from '../../pages/Clients/ClientsForm';
 import FlightsForm from '../../pages/Flights/FlightsForm';
 import PlanesForm from '../../pages/Planes/PlanesForm';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user/list';
 import Popup from '../Modal/Modal';
 
-import { axios } from 'utils/axios.interceptor';
 import { enqueueSnackbar } from 'notistack';
+import { axios } from 'utils/axios.interceptor';
 
 // ----------------------------------------------------------------------
 
@@ -56,7 +55,7 @@ export default function List({
 }) {
     // const theme = useTheme();
 
-    const [userList, setUserList] = useState(table_data);
+    const [userList,] = useState(table_data);
 
     const [page, setPage] = useState(0);
 
@@ -120,11 +119,11 @@ export default function List({
             case 'agent':
                 deleteURI = `/auth/delete-user/${id}`
                 break;
-            case 'client':
-                deleteURI = `/auth/delete-client/${id}`
+            case 'plane':
+                deleteURI = `/constant/delete-airplane/${id}`
                 break;
-            case 'transaction':
-                deleteURI = `/transaction/delete/${id}`
+            case 'alert':
+                deleteURI = currentTable === 'templates' ? `/template/delete-alert-template/${id}` : `/constant/delete-call-type/${id}`
                 break;
             case 'Product':
                 deleteURI = `/product/delete/${id}`
@@ -188,15 +187,13 @@ export default function List({
                             }
                         >
                             {source_type === 'agent' ? (
-                                <AgentsForm action="Add" toggleModal={toggleModal} />
-                            ) : source_type === 'client' ? (
-                                <ClientsForm action="Add" toggleModal={toggleModal} />
+                                <AgentsForm action="Add" toggleModal={toggleModal} refresh={refresh}/>
                             ) : source_type === 'flight' ? (
-                                <FlightsForm action="Add" toggleModal={toggleModal} />
+                                <FlightsForm action="Add" toggleModal={toggleModal} refresh={refresh}/>
                             ) : source_type === 'alert' ? (
-                                <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} />
+                                <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh}/>
                             ) : source_type === 'plane' ? (
-                                <PlanesForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} />
+                                <PlanesForm  action="Add" toggleModal={toggleModal} refresh={refresh}/>
                             ) : null}
                         </Popup>
                     </>
@@ -214,23 +211,24 @@ export default function List({
                         />
                     </Box>
                     {source_type === 'plane' ? (
-                        <Box sx={{ flexGrow: 0.5 }}>
-                            <FormControl>
-                                <InputLabel id="select-label" className="text-primary font-bold">
-                                    Table
-                                </InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    id="demo-simple-select"
-                                    value={currentTable}
-                                    label="Age"
-                                    onChange={(e) => onTableChange(e.target.value)}
-                                >
-                                    <MenuItem value={'aeroplanes'}>Supported Aeroplanes</MenuItem>
-                                    <MenuItem value={'companies'}>Aeroplane companies</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
+                        <></>
+                        // <Box sx={{ flexGrow: 0.5 }}>
+                        //     <FormControl>
+                        //         <InputLabel id="select-label" className="text-primary font-bold">
+                        //             Table
+                        //         </InputLabel>
+                        //         <Select
+                        //             labelId="select-label"
+                        //             id="demo-simple-select"
+                        //             value={currentTable}
+                        //             label="Age"
+                        //             onChange={(e) => onTableChange(e.target.value)}
+                        //         >
+                        //             <MenuItem value={'aeroplanes'}>Supported Aeroplanes</MenuItem>
+                        //             <MenuItem value={'companies'}>Aeroplane companies</MenuItem>
+                        //         </Select>
+                        //     </FormControl>
+                        // </Box>
                     ) : source_type === 'alert' && (
                         <Box sx={{ flexGrow: 0.5 }}>
                             <FormControl>
@@ -267,7 +265,7 @@ export default function List({
                             <TableBody>
                                 {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, idx) => {
                                     const { id } = row;
-                                    // const { id, avatarUrl, name, email, phoneNumber, dob, gender, shift, createdAt, status } = row;
+                                    // const { id, avatarUrl, name, email, phoneNumber, dob, gender, shift, created_at, status } = row;
                                     const isItemSelected = selected.indexOf(id) !== -1;
 
                                     return (
@@ -294,7 +292,7 @@ export default function List({
                                                     ) : (
                                                         <TableCell key={cell_index} align="left">
                                                             <Typography variant="p" noWrap>
-                                                                {col.id === 'createdAt' ? (
+                                                                {col.id === 'created_at' ? (
                                                                     <Moment date={row[col.id]} fromNow />
                                                                 ) : col.id === 'dob' ? (
                                                                     <Moment date={row[col.id]} format="YYYY/MM/DD" />
@@ -317,7 +315,8 @@ export default function List({
                                                         source_type={source_type}
                                                         onDelete={() => handleDelete(row['id'])}
                                                         userName={row[search_key]}
-                                                        userInfo={row}
+                                                        rowInfo={row}
+                                                        refresh={refresh}
                                                     />
                                                 </TableCell>
                                             )}

@@ -29,15 +29,15 @@ const pages = {
             breadcrumbs: false
             // target: true
         },
-        {
-            id: 'Clients',
-            title: 'Clients',
-            type: 'item',
-            url: '/dashboard/clients',
-            icon: icons.TeamOutlined,
-            breadcrumbs: false
-            // target: true
-        },
+        // {
+        //     id: 'Clients',
+        //     title: 'Clients',
+        //     type: 'item',
+        //     url: '/dashboard/clients',
+        //     icon: icons.TeamOutlined,
+        //     breadcrumbs: false
+        //     // target: true
+        // },
         {
             id: 'Flights',
             title: 'Flights Schedule',

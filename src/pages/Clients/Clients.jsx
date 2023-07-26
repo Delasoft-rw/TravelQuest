@@ -52,7 +52,7 @@ function Clients() {
     { id: 'dob', label: 'DOB', alignRight: false },
     { id: 'gender', label: 'Gender', alignRight: false },
     { id: 'userType', label: 'User Type', alignRight: false },
-    { id: 'createdAt', label: 'Added', alignRight: false },
+    { id: 'created_at', label: 'Added', alignRight: false },
   ];
 
   React.useEffect(() => {

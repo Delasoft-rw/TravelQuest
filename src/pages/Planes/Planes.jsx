@@ -1,75 +1,69 @@
-import { faker } from '@faker-js/faker';
-import { useEffect, useState } from 'react';
+import { Button } from '@mui/material';
+import React from 'react';
+import { axios } from 'utils/axios.interceptor';
+import { closeSnackbar, enqueueSnackbar } from 'utils/index';
 import List from '../../components/Table/List';
 
 function Planes() {
-    const [currentTable, setCurrentTable] = useState('aeroplanes');
-    const [addLabel, setAddLabel] = useState('Add Aeroplane');
-    const [searchKey, setSearchKey] = useState('name');
-    const [breadcrumbTitle, setBreadcrumbTitle] = useState('Supported Planes')
-    const [tableHead, setTableHead] = useState([]);
+    const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [key, setKey] = React.useState(null)
 
-    function generateAirplaneName() {
-        const prefix = faker.commerce.productAdjective();
-        const suffix = faker.commerce.productName();
+  const getPlanes = async () => {
+    setLoading(true)
+    try {
+      const { data } = await axios.get('/constant/all-airplanes')
 
-        return `${prefix} ${suffix}`;
+      console.log(data)
+      setData(data.map(el => ({ ...el })));
+    } catch (e) {
+      console.log(e)
+      enqueueSnackbar('Failed to load airplanes', {
+        action: () => (<>
+          <Button onClick={() => {
+            getPlanes()
+          }} >Try Again</Button>
+        </>)
+      })
+    } finally {
+      setLoading(false)
     }
+  }
 
-    const generateData = () => {
-        const data = [];
-        for (let i = 0; i < 10; i++) {
-            const id = i + 1;
-            const name = generateAirplaneName();
-            const company = faker.helpers.arrayElement(['RwandaAi', 'Quartar Airways']);
-            const address = faker.helpers.arrayElement(['CHK 045 K', 'ST234. 4K, Kigali'])
-            const doneBy = faker.helpers.arrayElement(['John Doe', 'Jane Doe']);
+  let searchKey = ['name', 'airplaneCode', 'created_at'];
 
-            const obj = {
-                id,
-                name,
-                address,
-                company,
-                doneBy
-            };
-            data.push(obj);
-        }
-        return data;
-    };
+  const table_head = [
+    {id: 'name', label: 'Name', alignRight: false},
+    {id: 'airplaneCode', label: 'Airplane Code', alignRight: false},
+    { id: 'created_at', label: 'Created At', alignRight: false },
+  ];
 
-    useEffect(() => {
-        if (currentTable === 'aeroplanes') {
-            setSearchKey('name');
-            setBreadcrumbTitle('Supported Aeroplanes');
-            setAddLabel('Add Aeroplane');
-            setTableHead([
-                { id: 'name', label: 'Name', alignRight: false },
-                { id: 'company', label: 'Owner (Company)', alignRight: false },
-                { id: 'doneBy', label: 'Added by', alignRight: false }
-            ]);
-        } else if (currentTable === 'companies') {
-              setSearchKey('name');
-              setBreadcrumbTitle('Aeroplane Companies');
-            setAddLabel('Add new company');
-              setTableHead([
-                  { id: 'name', label: 'Company Name', alignRight: false },
-                  { id: 'address', label: 'Address', alignRight: false },
-                  { id: 'doneBy', label: 'Added by', alignRight: false }
-              ]);
-        }
-    }, [currentTable]);
+  React.useEffect(() => {
+    getPlanes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  React.useEffect(() => {
+    if (loading && !key) {
+      setKey(enqueueSnackbar('Loading...', {
+        persist: true,
+      }))
+    } else if (!loading && key) {
+      closeSnackbar(key)
+      setKey(null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
 
     return (
         <>
             <List
                 search_key={searchKey}
-                add_label={addLabel}
+                add_label={'New Plane'}
                 source_type="plane"
-                breadcrumbTitle={breadcrumbTitle}
-                table_data={generateData()}
-                table_head={tableHead}
-                onTableChange={(value) => setCurrentTable(value)}
-                currentTable={currentTable}
+                refresh={getPlanes}
+                table_data={data}
+                table_head={table_head}
             />
         </>
     );

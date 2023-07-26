@@ -1,20 +1,19 @@
 import PropTypes from 'prop-types';
-import { paramCase } from 'change-case';
 import { useState } from 'react';
 // next
 import { Link } from 'react-router-dom';
 // @mui
-import { MenuItem, IconButton } from '@mui/material';
+import { IconButton, MenuItem } from '@mui/material';
 
 // components
 import Iconify from '../../../components/Iconify';
 import MenuPopover from '../../../components/MenuPopover';
 import Popup from '../../../components/Modal/Modal';
-import AlertsForm from '../../../pages/Alerts/AlertsForm';
-import PlanesForm from '../../../pages/Planes/PlanesForm';
-import FlightsForm from '../../../pages/Flights/FlightsForm';
-import ClientsForm from '../../../pages/Clients/ClientsForm';
 import AgentsForm from '../../../pages/Agents/AgentsForm';
+import AlertsForm from '../../../pages/Alerts/AlertsForm';
+import ClientsForm from '../../../pages/Clients/ClientsForm';
+import FlightsForm from '../../../pages/Flights/FlightsForm';
+import PlanesForm from '../../../pages/Planes/PlanesForm';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +22,7 @@ UserMoreMenu.propTypes = {
     userName: PropTypes.string
 };
 
-export default function UserMoreMenu({ onDelete, userInfo, source_type, edit_label, currentTable }) {
+export default function UserMoreMenu({ onDelete, rowInfo, source_type, edit_label, currentTable, refresh = () => {} }) {
     const [open, setOpen] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const toggleModal = () => {
@@ -81,15 +80,22 @@ export default function UserMoreMenu({ onDelete, userInfo, source_type, edit_lab
                             }
                         >
                             {source_type === 'agent' ? (
-                                <AgentsForm action="Edit" toggleModal={toggleModal} />
+                                <AgentsForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
                             ) : source_type === 'client' ? (
-                                <ClientsForm action="Edit" toggleModal={toggleModal} initialData={userInfo} />
+                                <ClientsForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
                             ) : source_type === 'flight' ? (
-                                <FlightsForm action="Edit" toggleModal={toggleModal} />
+                                <FlightsForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
                             ) : source_type === 'alert' ? (
-                                <AlertsForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
+                                <AlertsForm
+                                    action_label={edit_label}
+                                    currentTable={currentTable}
+                                    action="Edit"
+                                    toggleModal={toggleModal}
+                                    initialData={rowInfo}
+                                    refresh={refresh}
+                                />
                             ) : source_type === 'plane' ? (
-                                <PlanesForm action_label={edit_label} currentTable={currentTable} action="Edit" toggleModal={toggleModal} />
+                                <PlanesForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
                             ) : null}
                         </Popup>
                     </Link>
