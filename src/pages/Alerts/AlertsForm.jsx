@@ -21,7 +21,7 @@ import AnimateButton from '../../components/@extended/AnimateButton';
 import Iconify from '../../components/Iconify';
 import { CircularProgress, enqueueSnackbar, getUserInfo } from 'utils/index';
 import { axios } from 'utils/axios.interceptor';
-import { MenuItem, Select } from '../../../node_modules/@mui/material/index';
+import { MenuItem, Select } from '@mui/material/index';
 
 
 const AlertsForm = ({ toggleModal, action, action_label, currentTable, refresh = () => { }, initialData = {} }) => {
@@ -175,18 +175,20 @@ const AlertsForm = ({ toggleModal, action, action_label, currentTable, refresh =
                                                 <Grid item xs={12}>
                                                     <Stack spacing={1}>
                                                         <InputLabel htmlFor="name">Name*</InputLabel>
-                                                        <OutlinedInput
-                                                            fullWidth
-                                                            error={Boolean(touched.name && errors.name)}
+                                                        <Select
+                                                            labelId="select-label"
                                                             id="name"
-                                                            type="text"
-                                                            value={values.name}
                                                             name="name"
-                                                            onBlur={handleBlur}
+                                                            value={values.name}
                                                             onChange={handleChange}
-                                                            placeholder=""
-                                                            inputProps={{}}
-                                                        />
+                                                        >
+                                                            {
+                                                                Array.from({ length: 10 }, (_, i) => i + 1).map(el => (
+                                                                    <MenuItem key={el} value={el}>{el} hours</MenuItem>
+                                                                ))
+                                                            }
+
+                                                        </Select>
                                                         {touched.name && errors.name && (
                                                             <FormHelperText error id="helper-text-name-signup">
                                                                 {errors.name}

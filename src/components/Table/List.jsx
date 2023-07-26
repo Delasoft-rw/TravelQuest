@@ -345,7 +345,7 @@ export default function List({
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={userList.length}
+                    count={filteredUsers.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={(e, page) => setPage(page)}
