@@ -33,4 +33,7 @@ const handleLogout = async () => {
     }
 };
 
-export { enqueueSnackbar, closeSnackbar, CircularProgress, getUserInfo, handleLogout };
+const camelToNormal = (val = '') =>
+  val.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^([a-z])/, (res) => res.toUpperCase());
+
+export { enqueueSnackbar, closeSnackbar, CircularProgress, getUserInfo, handleLogout, camelToNormal };

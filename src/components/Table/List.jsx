@@ -35,6 +35,7 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user
 import Popup from '../Modal/Modal';
 
 import { enqueueSnackbar } from 'notistack';
+import CelebrationsForm from 'pages/Celebrations/CelebrationsForm';
 import { axios } from 'utils/axios.interceptor';
 
 // ----------------------------------------------------------------------
@@ -187,13 +188,15 @@ export default function List({
                             }
                         >
                             {source_type === 'agent' ? (
-                                <AgentsForm action="Add" toggleModal={toggleModal} refresh={refresh}/>
+                                <AgentsForm action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : source_type === 'flight' ? (
-                                <FlightsForm action="Add" toggleModal={toggleModal} refresh={refresh}/>
+                                <FlightsForm action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : source_type === 'alert' ? (
-                                <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh}/>
+                                <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh} />
+                            ) : source_type === 'celebration' ? (
+                                <CelebrationsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : source_type === 'plane' ? (
-                                <PlanesForm  action="Add" toggleModal={toggleModal} refresh={refresh}/>
+                                <PlanesForm action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : null}
                         </Popup>
                     </>
