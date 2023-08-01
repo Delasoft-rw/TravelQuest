@@ -10,6 +10,15 @@ const getUserInfo = () => {
     }
 };
 
+const isUserAdmin = () => {
+    const roles = getUserInfo().roles;
+    if(roles) {
+        return roles.some(el => el.name.toLowerCase() === 'admin')
+    } else {
+        return false
+    }
+}
+
 const CircularProgress = () => {
     return <CircularProgressComponent size={20} thickness={5} />;
 };
@@ -36,4 +45,4 @@ const handleLogout = async () => {
 const camelToNormal = (val = '') =>
   val.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^([a-z])/, (res) => res.toUpperCase());
 
-export { enqueueSnackbar, closeSnackbar, CircularProgress, getUserInfo, handleLogout, camelToNormal };
+export { enqueueSnackbar, closeSnackbar, CircularProgress, getUserInfo, handleLogout, camelToNormal, isUserAdmin };

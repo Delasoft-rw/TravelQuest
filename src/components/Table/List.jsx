@@ -37,6 +37,7 @@ import Popup from '../Modal/Modal';
 import { enqueueSnackbar } from 'notistack';
 import CelebrationsForm from 'pages/Celebrations/CelebrationsForm';
 import { axios } from 'utils/axios.interceptor';
+import { isUserAdmin } from 'utils/index';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ export default function List({
     onTableChange,
     refresh = () => { }
 }) {
-    // const theme = useTheme();
+    const displaySourceType = source_type === 'agent' ? (isUserAdmin() ? 'agent' : 'client') : 'New Agent'
 
     const [userList,] = useState(table_data);
 
@@ -174,8 +175,8 @@ export default function List({
     return (
         <Container maxWidth={false}>
             <HeaderBreadcrumbs
-                heading={breadcrumbTitle ? breadcrumbTitle : source_type.charAt(0).toUpperCase() + source_type.slice(1) + 's'}
-                links={[{ name: 'Dashboard', href: '/dashboard' }, { name: source_type }]}
+                heading={breadcrumbTitle ? breadcrumbTitle : displaySourceType.charAt(0).toUpperCase() + displaySourceType.slice(1) + 's'}
+                links={[{ name: 'Dashboard', href: '/dashboard' }, { name: displaySourceType }]}
                 action={
                     <>
                         <Popup

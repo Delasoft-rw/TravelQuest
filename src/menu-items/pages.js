@@ -2,6 +2,7 @@
 import { FieldTimeOutlined, UserAddOutlined, TeamOutlined, AlertOutlined } from '@ant-design/icons';
 import { ReactComponent as PlaneIcon } from '../assets/images/icons/plane.svg';
 import { ReactComponent as CelebrationIcon } from '../assets/images/icons/celebration.svg';
+import { isUserAdmin } from 'utils/index';
 
 // icons
 const icons = {
@@ -22,7 +23,7 @@ const pages = {
     children: [
         {
             id: 'Agents',
-            title: 'Agents',
+            title: isUserAdmin() ? 'Agents' : 'Clients',
             type: 'item',
             url: '/dashboard/agents',
             icon: icons.TeamOutlined,

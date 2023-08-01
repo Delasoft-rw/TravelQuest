@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React from 'react';
 import { axios } from 'utils/axios.interceptor';
-import { closeSnackbar, enqueueSnackbar } from 'utils/index';
+import { closeSnackbar, enqueueSnackbar, isUserAdmin } from 'utils/index';
 import List from "../../components/Table/List";
 
 function Agents() {
@@ -72,7 +72,7 @@ function Agents() {
 
   return (
     <>
-      <List refresh={getAgents} search_key={searchKey} add_label={'New Agent'} source_type='agent' table_data={data} table_head={table_head} />
+      <List refresh={getAgents} search_key={searchKey} add_label={isUserAdmin() ? 'New Agent/Client' : 'New Client'} source_type='agent' table_data={data} table_head={table_head} />
     </>
   )
 }
