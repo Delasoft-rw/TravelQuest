@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -9,6 +9,8 @@ import MonthlyBarChart from './MonthlyBarChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from '../../components/MainCard';
 import Analytics from '../../components/cards/statistics/Analytics';
+import { useNavigate } from 'react-router-dom';
+import { isUserAdmin } from 'utils/index';
 
 // sales report status
 const status = [
@@ -31,6 +33,15 @@ const status = [
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(!isUserAdmin()) {
+            navigate('/dashboard/agents')
+            // console.log('not admin')
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>

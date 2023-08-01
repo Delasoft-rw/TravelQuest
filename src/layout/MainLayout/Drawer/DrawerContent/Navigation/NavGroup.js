@@ -9,7 +9,7 @@ import NavItem from './NavItem';
 
 // ==============================|| NAVIGATION - LIST GROUP ||============================== //
 
-const AgentRoutes = ['dashboard','Agents', 'Flights', 'Account'];
+const AgentRoutes = ['Agents', 'Flights', 'Account'];
 
 const NavGroup = ({ item }) => {
     const menu = useSelector((state) => state.menu);

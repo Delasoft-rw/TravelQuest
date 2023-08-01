@@ -72,7 +72,13 @@ function Agents() {
 
   return (
     <>
-      <List refresh={getAgents} search_key={searchKey} add_label={isUserAdmin() ? 'New Agent/Client' : 'New Client'} source_type='agent' table_data={data} table_head={table_head} />
+      <List 
+      refresh={getAgents} 
+      search_key={searchKey} 
+      add_label={isUserAdmin() ? 'New Agent/Client' : 'New Client'} 
+      source_type='agent' 
+      table_data={isUserAdmin() ? data : data.filter(el => el.userType === 'client')} 
+      table_head={table_head} />
     </>
   )
 }
