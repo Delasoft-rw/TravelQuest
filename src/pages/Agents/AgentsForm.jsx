@@ -569,7 +569,7 @@ const AgentsForm = ({ toggleModal, action, refresh = () => {} }) => {
                                                 color="primary"
                                                 className="bg-primary"
                                             >
-                                                {action} Agent
+                                                {action} {isUserAdmin() ? 'Agent/Client' : 'Client'}
                                             </Button>
                                         </AnimateButton>
                                     </Grid>
