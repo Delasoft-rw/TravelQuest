@@ -15,7 +15,7 @@ const NavGroup = ({ item }) => {
     const menu = useSelector((state) => state.menu);
     const { userInfo } = useSelector((state) => state.menu);
     const { drawerOpen } = menu;
-    const isAdmin = userInfo.roles.some((el) => el.name.toLowerCase() === 'admin');
+    const isAdmin = userInfo.roles !== null && userInfo.roles !== undefined ? userInfo.roles.some((el) => el.name.toLowerCase() === 'admin') : false;
 
     const navCollapse = item.children
         ?.filter((el) => (isAdmin ? true : AgentRoutes.includes(el.id)))
