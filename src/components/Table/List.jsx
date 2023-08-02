@@ -123,6 +123,9 @@ export default function List({
             case 'plane':
                 deleteURI = `/constant/delete-airplane/${id}`
                 break;
+            case 'flight':
+                deleteURI = `/flight-schedule/delete/${id}`
+                break;
             case 'alert':
                 deleteURI = currentTable === 'templates' ? `/template/delete-alert-template/${id}` : `/constant/delete-call-type/${id}`
                 break;

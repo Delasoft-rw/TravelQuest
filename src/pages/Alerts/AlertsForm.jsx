@@ -199,16 +199,17 @@ const AlertsForm = ({ toggleModal, action, action_label, currentTable, refresh =
                                                 <Grid item xs={12}>
                                                     <Stack spacing={1}>
                                                         <InputLabel htmlFor="type">Type*</InputLabel>
-                                                        <Select
-                                                            labelId="select-label"
-                                                            id="type"
-                                                            name="type"
+                                                        <OutlinedInput
+                                                            id="type-login"
+                                                            type="text"
                                                             value={values.type}
+                                                            name="type"
+                                                            onBlur={handleBlur}
                                                             onChange={handleChange}
-                                                        >
-                                                            <MenuItem value={'reminder'}>Reminder</MenuItem>
-
-                                                        </Select>
+                                                            placeholder="e.g: reminder"
+                                                            fullWidth
+                                                            error={Boolean(touched.type && errors.type)}
+                                                        />
                                                         {touched.type && errors.type && (
                                                             <FormHelperText error id="helper-text-type-signup">
                                                                 {errors.type}

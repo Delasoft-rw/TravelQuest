@@ -69,7 +69,7 @@ function Flights() {
 
   return (
     <>
-      <List search_key={searchKey} add_label={'New Flight'} source_type='flight' breadcrumbTitle="Flights Schedule" table_data={data} table_head={table_head} />
+      <List refresh={getFlightSchedules} search_key={searchKey} add_label={'New Flight'} source_type='flight' breadcrumbTitle="Flights Schedule" table_data={data} table_head={table_head} />
     </>
   )
 }

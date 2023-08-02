@@ -1,9 +1,5 @@
-import React from 'react'
-import List from "../../components/Table/List"
-import { axios } from 'utils/axios.interceptor';
-import { enqueueSnackbar, closeSnackbar } from 'notistack';
-import { Button } from '@mui/material';
 import { faker } from '@faker-js/faker';
+import List from "../../components/Table/List";
 
 
 function Celebrations() {
@@ -67,7 +63,7 @@ function Celebrations() {
   let searchKey = 'fullName';
   const table_head = [
     { id: 'clientName', label: 'Client Names', alignRight: false },
-    { id: 'DOB', label: 'Date', alignRight: false },
+    // { id: 'DOB', label: 'Date', alignRight: false },
     { id: 'message', label: 'Template', alignRight: false },
   ];
 

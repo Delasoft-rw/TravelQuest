@@ -18,7 +18,7 @@ import * as Yup from 'yup';
 
 // project import
 import AnimateButton from '../../components/@extended/AnimateButton';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 // assets
 import Iconify from '../../components/Iconify';
@@ -61,24 +61,12 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
     };
 
     const getClients = async () => {
-        setClients([
-            {
-                id: '1234',
-                name: 'John Doe'
-
-            },
-            {
-                id: '2345',
-                name: 'Jane Doe'
-            }
-        ])
-        // return;
-        // try {
-        //     const { data } = await axios.get('/auth/all-users');
-        //     setClients(data.map((el) => ({ ...el })));
-        // } catch (e) {
-        //     console.log(e);
-        // }
+        try {
+            const { data } = await axios.get('/auth/all-users');
+            setClients(data.filter(el => el.userType === 'client'));
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const getData = async () => {
@@ -155,32 +143,57 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                             airplane_id: initialData.airplane_id ?? '',
                             alert_template_id: initialData.alert_template_id ?? '',
                             ticket_number: initialData.ticket_number ?? '',
-                            counter: initialData.counter ?? '',
-                            // userdetails_id: initialData.userdetails_id ?? '',
+                            // counter: initialData.counter ?? '',
+                            userdetails_id: initialData.userdetails_id ?? '',
                             submit: null,
                         }}
                         validationSchema={Yup.object().shape({
-                            flight_number: Yup.string().max(255).required('Flight Number is required'),
-                            departure_airport: Yup.string().max(255).required('Departure Airport is required'),
-                            arrival_airport: Yup.string().max(255).required('Arrival Airport is required'),
+                            flight_number: Yup.string().max(255),
+                            departure_airport: Yup.string().max(255),
+                            arrival_airport: Yup.string().max(255),
                             departure_time: Yup.date().required('Departure Time is required'),
-                            arrival_time: Yup.date().required('Arrival Time is required'),
+                            arrival_time: Yup.date(),
                             status: Yup.string().max(255).required('Status is required'),
                             caller_type_id: Yup.string().max(255).required('Caller Type ID is required'),
                             airplane_id: Yup.string().max(255).required('Airplane ID is required'),
                             alert_template_id: Yup.string().max(255).required('Alert Template ID is required'),
-                            ticket_number: Yup.string().max(255).required('Ticket Number is required'),
-                            counter: Yup.number().required('Counter is required'),
-                            // userdetails_id: Yup.number().required('User Details ID is required'),
+                            ticket_number: Yup.string().max(255),
+                            // counter: Yup.number().required('Counter is required'),
+                            userdetails_id: Yup.number().required('Client is required'),
                         })}
                         onSubmit={handleOnSubmit}
                     >
                         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                             <form noValidate onSubmit={handleSubmit}>
                                 <Grid container spacing={3}>
+                                <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="userdetails_id">Client*</InputLabel>
+                                            <Select
+
+                                                id="userdetails_id"
+                                                name="userdetails_id"
+                                                value={values.userdetails_id}
+                                                onChange={handleChange}
+                                            >
+                                                {
+                                                    clients.map((el) => (
+                                                        <MenuItem key={el.id} value={el.id}>{el.lastName} {el.firstName}</MenuItem>
+                                                    ))
+
+                                                }
+
+                                            </Select>
+                                            {touched.userdetails_id && errors.userdetails_id && (
+                                                <FormHelperText error id="helper-text-caller_type-signup">
+                                                    {errors.userdetails_id}
+                                                </FormHelperText>
+                                            )}
+                                        </Stack>
+                                    </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="flight_number">Flight Number*</InputLabel>
+                                            <InputLabel htmlFor="flight_number">Flight Number</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 name="flight_number"
@@ -200,7 +213,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="departure_airport">Departure Airport*</InputLabel>
+                                            <InputLabel htmlFor="departure_airport">Departure Airport</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 name="departure_airport"
@@ -222,7 +235,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="arrival_airport">Arrival Airport*</InputLabel>
+                                            <InputLabel htmlFor="arrival_airport">Arrival Airport</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 name="arrival_airport"
@@ -245,7 +258,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="departure_time">Departure Time*</InputLabel>
-                                            <DatePicker
+                                            <DateTimePicker
                                                 name="departure_time"
                                                 id="departure_time"
                                                 value={values.departure_time}
@@ -269,8 +282,8 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="arrival_time">Arrival Time*</InputLabel>
-                                            <DatePicker
+                                            <InputLabel htmlFor="arrival_time">Arrival Time</InputLabel>
+                                            <DateTimePicker
                                                 name="arrival_time"
                                                 id="arrival_time"
                                                 value={values.arrival_time}
@@ -390,7 +403,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="ticket_number">Ticket Number*</InputLabel>
+                                            <InputLabel htmlFor="ticket_number">Ticket Number</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 name="ticket_number"
@@ -410,50 +423,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                             )}
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="counter">Counter*</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                name="counter"
-
-                                                id="counter"
-                                                type="number"
-                                                value={values.counter}
-
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                error={Boolean(touched.counter && errors.counter)}
-                                            />
-                                            {touched.counter && errors.counter && (
-                                                <FormHelperText error id="helper-text-counter-signup">
-                                                    {errors.counter}
-                                                </FormHelperText>
-                                            )}
-                                        </Stack>
-                                    </Grid>
-                                    {/* <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="userdetails_id">User Details ID*</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                name="userdetails_id"
-
-                                                id="userdetails_id"
-                                                type="number"
-                                                value={values.userdetails_id}
-
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                error={Boolean(touched.userdetails_id && errors.userdetails_id)}
-                                            />
-                                            {touched.userdetails_id && errors.userdetails_id && (
-                                                <FormHelperText error id="helper-text-userdetails_id-signup">
-                                                    {errors.userdetails_id}
-                                                </FormHelperText>
-                                            )}
-                                        </Stack>
-                                    </Grid> */}
+                                    
                                     {errors.submit && (
                                         <Grid item xs={12}>
                                             <FormHelperText error>{errors.submit}</FormHelperText>

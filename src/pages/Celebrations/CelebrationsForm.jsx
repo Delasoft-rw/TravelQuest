@@ -22,33 +22,56 @@ import * as Yup from 'yup';
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // assets
 import Iconify from 'components/Iconify';
 
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+import { axios } from 'utils/axios.interceptor';
+import { closeSnackbar, enqueueSnackbar } from 'utils/index';
 
 
-const CelebrationsForm = ({ toggleModal, action }) => {
-  const [level, setLevel] = useState();
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialData = {} }) => {
+  const [clients, setClients] = useState([])
+
+  const getClients = async () => {
+    try {
+      const { data } = await axios.get('/auth/all-users');
+      setClients(data.filter(el => el.userType === 'client'));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const getData = async () => {
+    try {
+      const key = enqueueSnackbar('Loading form data...', {
+        persist: true,
+      })
+      await getClients();
 
-  const changePassword = (value) => {
-    const temp = strengthIndicator(value);
-    setLevel(strengthColor(temp));
-  };
+      closeSnackbar(key)
+
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onHandleSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
+    try {
+      setStatus({ success: false });
+      setSubmitting(false);
+      toggleModal();
+    } catch (err) {
+      console.error(err);
+      setStatus({ success: false });
+      setErrors({ submit: err.message });
+      setSubmitting(false);
+    }
+  }
 
   useEffect(() => {
-    changePassword('');
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -63,28 +86,17 @@ const CelebrationsForm = ({ toggleModal, action }) => {
         <Grid item xs={12}>
           <Formik
             initialValues={{
-              clientName: '',
-              dateOfBirth: '',
-              message: '',
+              clientName: initialData.clientName ?? '',
+              // dateOfBirth: initialData.dateOfBirth ?? '',
+              message: initialData.message ?? '',
               submit: null
             }}
             validationSchema={Yup.object().shape({
               clientName: Yup.string().required('Client Name is required'),
-              dateOfBirth: Yup.string().required('Date of Birth is required'),
+              // dateOfBirth: Yup.string().required('Date of Birth is required'),
               message: Yup.string().required('Message is required')
             })}
-            onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-              try {
-                setStatus({ success: false });
-                setSubmitting(false);
-                toggleModal();
-              } catch (err) {
-                console.error(err);
-                setStatus({ success: false });
-                setErrors({ submit: err.message });
-                setSubmitting(false);
-              }
-            }}
+            onSubmit={onHandleSubmit}
           >
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
               <form noValidate onSubmit={handleSubmit}>
@@ -99,9 +111,8 @@ const CelebrationsForm = ({ toggleModal, action }) => {
                         onChange={handleChange}
                       >
                         {
-                          // An Array of random names
-                          ['John', 'Jane', 'Jack', 'Jill'].map((name, index) => (
-                            <MenuItem key={index} value={name}>{name}</MenuItem>
+                          clients.map((client, index) => (
+                            <MenuItem key={index} value={client.id}>{client.lastName} {client.firstName}</MenuItem>
                           ))
                         }
                       </Select>
@@ -113,7 +124,7 @@ const CelebrationsForm = ({ toggleModal, action }) => {
                     </Stack>
                   </Grid>
 
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="dateOfBirth-signup">Date*</InputLabel>
                       <DatePicker
@@ -137,7 +148,7 @@ const CelebrationsForm = ({ toggleModal, action }) => {
                         </FormHelperText>
                       )}
                     </Stack>
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item xs={12}>
                     <Stack spacing={1}>
