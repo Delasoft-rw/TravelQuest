@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import { Box, Button, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
@@ -9,6 +9,8 @@ import MonthlyBarChart from './MonthlyBarChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from '../../components/MainCard';
 import Analytics from '../../components/cards/statistics/Analytics';
+import { axios } from 'utils/axios.interceptor';
+import { closeSnackbar, enqueueSnackbar } from 'utils/index';
 
 // sales report status
 const status = [
@@ -31,6 +33,43 @@ const status = [
 const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
+    const [stats, setStats] = useState({});
+
+    const getStats = async () => {
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const todayFormatted = today.toISOString().slice(0, 10);
+        const tomorrowFormatted = tomorrow.toISOString().slice(0, 10);
+
+        try {
+            const { data } = await axios.get(`/dashboard/statistics?start_date=${todayFormatted}&end_date=${tomorrowFormatted}`);
+            setStats(data);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const getData = async () => {
+        try {
+            const key = enqueueSnackbar('Loading Statistics...', {
+                persist: true,
+                variant: 'info',
+            })
+            await getStats();
+
+            closeSnackbar(key)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -39,22 +78,22 @@ const DashboardDefault = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Total Agents" count="15" />
+                <Analytics title="Total Agents" count={stats.agents ?? '--'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Total Clients" count="50" />
+                <Analytics title="Total Clients" count={stats.clients ?? '--'}/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Daily Flights" count="30" />
+                <Analytics title="Daily Flights" count={stats.flightSchedules ?? '--'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Total Flights" count="30" />
+                <Analytics title="Total Flights" count={stats.flightSchedules ?? '--'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Monthly earnings" count="30" />
+                <Analytics title="Monthly earnings" count="-- RWF" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Anual earnings" count="1,000,000 RWF" />
+                <Analytics title="Anual earnings" count="-- RWF" />
             </Grid>
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
             {/* row 2 */}
