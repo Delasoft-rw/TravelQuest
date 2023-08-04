@@ -9,13 +9,10 @@ import MonthlyBarChart from './MonthlyBarChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from '../../components/MainCard';
 import Analytics from '../../components/cards/statistics/Analytics';
-<<<<<<< HEAD
 import { axios } from 'utils/axios.interceptor';
 import { closeSnackbar, enqueueSnackbar } from 'utils/index';
-=======
 import { useNavigate } from 'react-router-dom';
 import { isUserAdmin } from 'utils/index';
->>>>>>> 3501a0d8671d693473449b78910d48d46fc28662
 
 // sales report status
 const status = [
@@ -39,6 +36,7 @@ const DashboardDefault = () => {
     const [value, setValue] = useState('today');
     const [slot, setSlot] = useState('week');
     const [stats, setStats] = useState({});
+    const navigate = useNavigate();
 
     const getStats = async () => {
         const today = new Date();
@@ -60,28 +58,24 @@ const DashboardDefault = () => {
         try {
             const key = enqueueSnackbar('Loading Statistics...', {
                 persist: true,
-                variant: 'info',
-            })
+                variant: 'info'
+            });
             await getStats();
 
-            closeSnackbar(key)
-
+            closeSnackbar(key);
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
-    }
+    };
 
     useEffect(() => {
         getData();
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if(!isUserAdmin()) {
-            navigate('/dashboard/agents')
+        if (!isUserAdmin()) {
+            navigate('/dashboard/agents');
             // console.log('not admin')
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -93,7 +87,7 @@ const DashboardDefault = () => {
                 <Analytics title="Total Agents" count={stats.agents ?? '--'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
-                <Analytics title="Total Clients" count={stats.clients ?? '--'}/>
+                <Analytics title="Total Clients" count={stats.clients ?? '--'} />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2}>
                 <Analytics title="Daily Flights" count={stats.flightSchedules ?? '--'} />
@@ -196,5 +190,4 @@ const DashboardDefault = () => {
         </Grid>
     );
 };
-
 export default DashboardDefault;
