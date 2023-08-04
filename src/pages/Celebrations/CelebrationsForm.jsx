@@ -6,7 +6,7 @@ import {
   FormHelperText,
   Grid,
   InputLabel,
-  OutlinedInput,
+  TextareaAutosize,
   Stack,
   Typography
 } from '@mui/material';
@@ -153,16 +153,24 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
                   <Grid item xs={12}>
                     <Stack spacing={1}>
                       <InputLabel htmlFor="message-signup">Message*</InputLabel>
-                      <OutlinedInput
-                        id="message-login"
+                      <TextareaAutosize
+                        // fullWidth
+                        minRows={3}
+                        error={errors.message}
+                        id="message-signup"
                         type="message"
                         value={values.message}
                         name="message"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder="John"
-                        fullWidth
-                        error={Boolean(touched.message && errors.message)}
+                        placeholder="Short message of Product"
+                        style={{
+                          border: !Boolean(touched.message && errors.message) ? '1px solid #c4c4c4' : '1px solid #f14343',
+                          borderRadius: '5px',
+                          padding: '15px',
+                          outline: 'none',
+                          fontFamily: 'unset'
+                        }}
                       />
                       {touched.message && errors.message && (
                         <FormHelperText error id="helper-text-message-signup">

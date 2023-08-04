@@ -7,7 +7,8 @@ import {
     InputLabel,
     OutlinedInput,
     Stack,
-    Typography
+    Typography,
+    TextareaAutosize
 } from '@mui/material';
 
 // third party
@@ -147,18 +148,24 @@ const AlertsForm = ({ toggleModal, action, action_label, currentTable, refresh =
                                             <Grid item xs={12}>
                                                 <Stack spacing={1}>
                                                     <InputLabel htmlFor="body">Body*</InputLabel>
-                                                    <OutlinedInput
-                                                        fullWidth
-                                                        multiline
-                                                        error={Boolean(touched.body && errors.body)}
-                                                        id="body"
-                                                        type="text"
+                                                    <TextareaAutosize
+                                                        // fullWidth
+                                                        minRows={3}
+                                                        error={errors.body}
+                                                        id="body-signup"
+                                                        type="body"
                                                         value={values.body}
                                                         name="body"
                                                         onBlur={handleBlur}
                                                         onChange={handleChange}
-                                                        placeholder=""
-                                                        inputProps={{}}
+                                                        placeholder="Short body of Product"
+                                                        style={{
+                                                            border: !Boolean(touched.body && errors.body) ? '1px solid #c4c4c4' : '1px solid #f14343',
+                                                            borderRadius: '5px',
+                                                            padding: '15px',
+                                                            outline: 'none',
+                                                            fontFamily: 'unset'
+                                                        }}
                                                     />
                                                     {touched.body && errors.body && (
                                                         <FormHelperText error id="helper-text-body-signup">
