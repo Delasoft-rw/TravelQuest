@@ -370,7 +370,7 @@ function applySortFilter(data, search_keys, query) {
     if (search_query) {
         return data.filter((item) => {
             return search_keys.some(key => {
-                if (item[key] === undefined) return false
+                if (!item[key]) return false
                 return item[key].toString().toLowerCase().includes(search_query)
             })
         });
