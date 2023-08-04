@@ -134,11 +134,11 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                     <Formik
                         initialValues={{
                             flight_number: initialData.flight_number ?? '',
-                            departure_airport: initialData.departure_airport ?? '',
-                            arrival_airport: initialData.arrival_airport ?? '',
+                            // departure_airport: initialData.departure_airport ?? '',
+                            // arrival_airport: initialData.arrival_airport ?? '',
                             departure_time: initialData.departure_time ?? '',
-                            arrival_time: initialData.arrival_time ?? '',
-                            status: initialData.status ?? '',
+                            // arrival_time: initialData.arrival_time ?? '',
+                            // status: initialData.status ?? '',
                             caller_type_id: initialData.caller_type_id ?? '',
                             airplane_id: initialData.airplane_id ?? '',
                             alert_template_id: initialData.alert_template_id ?? '',
@@ -149,13 +149,13 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                         }}
                         validationSchema={Yup.object().shape({
                             flight_number: Yup.string().max(255),
-                            departure_airport: Yup.string().max(255),
-                            arrival_airport: Yup.string().max(255),
+                            // departure_airport: Yup.string().max(255),
+                            // arrival_airport: Yup.string().max(255),
                             departure_time: Yup.date().required('Departure Time is required'),
-                            arrival_time: Yup.date(),
-                            status: Yup.string().max(255).required('Status is required'),
+                            // arrival_time: Yup.date(),
+                            // status: Yup.string().max(255).required('Status is required'),
                             caller_type_id: Yup.string().max(255).required('Caller Type ID is required'),
-                            airplane_id: Yup.string().max(255).required('Airplane ID is required'),
+                            airplane_id: Yup.string().max(255),
                             alert_template_id: Yup.string().max(255).required('Alert Template ID is required'),
                             ticket_number: Yup.string().max(255),
                             // counter: Yup.number().required('Counter is required'),
@@ -211,7 +211,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                             )}
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    {/* <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="departure_airport">Departure Airport</InputLabel>
                                             <OutlinedInput
@@ -232,8 +232,8 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                                 </FormHelperText>
                                             )}
                                         </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    </Grid> */}
+                                    {/* <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="arrival_airport">Arrival Airport</InputLabel>
                                             <OutlinedInput
@@ -254,7 +254,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                                 </FormHelperText>
                                             )}
                                         </Stack>
-                                    </Grid>
+                                    </Grid> */}
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="departure_time">Departure Time*</InputLabel>
@@ -280,7 +280,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                             )}
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    {/* <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="arrival_time">Arrival Time</InputLabel>
                                             <DateTimePicker
@@ -304,8 +304,8 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                                 </FormHelperText>
                                             )}
                                         </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    </Grid> */}
+                                    {/* <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="status">Status*</InputLabel>
                                             <Select
@@ -325,7 +325,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                                 </FormHelperText>
                                             )}
                                         </Stack>
-                                    </Grid>
+                                    </Grid> */}
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="caller_type_id">Call Type*</InputLabel>
@@ -353,7 +353,7 @@ const FlightsForm = ({ toggleModal, action, initialData = {}, refresh = () => { 
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="airplane_id">Airplane*</InputLabel>
+                                            <InputLabel htmlFor="airplane_id">Airplane</InputLabel>
                                             <Select
 
                                                 id="airplane_id"

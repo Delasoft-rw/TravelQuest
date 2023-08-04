@@ -1,9 +1,8 @@
-import React from 'react'
-import List from "../../components/Table/List"
-import { faker } from '@faker-js/faker';
+import { Button } from '@mui/material/index';
+import React from 'react';
 import { axios } from 'utils/axios.interceptor';
 import { closeSnackbar, enqueueSnackbar } from 'utils/index';
-import { Button } from '@mui/material/index';
+import List from "../../components/Table/List";
 
 
 function Flights() {
@@ -36,16 +35,16 @@ function Flights() {
 
   const table_head = [
     { id: 'flight_number', label: 'Flight Number', alignRight: false },
-    { id: 'departure_airport', label: 'Departure Airport', alignRight: false },
-    { id: 'arrival_airport', label: 'Arrival Airport', alignRight: false },
+    // { id: 'departure_airport', label: 'Departure Airport', alignRight: false },
+    // { id: 'arrival_airport', label: 'Arrival Airport', alignRight: false },
     { id: 'departure_time', label: 'Departure Time', alignRight: false },
-    { id: 'arrival_time', label: 'Arrival Time', alignRight: false },
+    // { id: 'arrival_time', label: 'Arrival Time', alignRight: false },
     { id: 'status', label: 'Status', alignRight: false },
     { id: 'caller_type_id', label: 'Caller Type ID', alignRight: false },
     { id: 'airplane_id', label: 'Airplane ID', alignRight: false },
     { id: 'alert_template_id', label: 'Alert Template ID', alignRight: false },
     { id: 'ticket_number', label: 'Ticket Number', alignRight: false },
-    { id: 'counter', label: 'Counter', alignRight: false },
+    // { id: 'counter', label: 'Counter', alignRight: false },
     { id: 'userdetails_id', label: 'User Details ID', alignRight: false },
   ];
 
