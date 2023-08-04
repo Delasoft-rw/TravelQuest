@@ -28,10 +28,10 @@ import { strengthColor, strengthIndicator } from '../../utils/password-strength'
 // assets
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import Iconify from '../../components/Iconify';
-import { CircularProgress, enqueueSnackbar } from 'utils/index';
+import { CircularProgress, enqueueSnackbar, isUserAdmin } from 'utils/index';
 import { axios } from 'utils/axios.interceptor';
 
-const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
+const AgentsForm = ({ toggleModal, action, refresh = () => {} }) => {
     const [level, setLevel] = useState();
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => {
@@ -48,33 +48,36 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
     };
 
     const handleOnSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
-        console.log('submitting')
+        console.log('submitting');
         try {
             setStatus({ success: false });
             setSubmitting(true);
-            enqueueSnackbar('Submitting...', { variant: 'info' })
+            enqueueSnackbar('Submitting...', { variant: 'info' });
 
             // const URL = action === 'Add' ? '/auth/add-user' : '/auth/edit-user'
             // const method = action === 'Add' ? 'post' : 'put'
             await axios.post('/auth/add-user', {
                 ...values,
-                role_id: 117,
-            })
+                ...(isUserAdmin()
+                    ? {}
+                    : {
+                          role_id: 117
+                      })
+            });
 
-            enqueueSnackbar('Added Agent', { variant: 'success' })
-
+            enqueueSnackbar('Added Agent', { variant: 'success' });
         } catch (err) {
             const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
             console.error(err);
             setStatus({ success: false });
             setErrors({ submit: errMessage });
-            enqueueSnackbar(errMessage, { variant: 'error' })
+            enqueueSnackbar(errMessage, { variant: 'error' });
         } finally {
             toggleModal();
             setSubmitting(false);
-            refresh()
+            refresh();
         }
-    }
+    };
 
     useEffect(() => {
         changePassword('');
@@ -82,10 +85,13 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
 
     return (
         <>
-            <Grid container spacing={3}
+            <Grid
+                container
+                spacing={3}
                 sx={{
-                    maxHeight: '80vh',
-                }}>
+                    maxHeight: '80vh'
+                }}
+            >
                 <Grid item xs={12}>
                     <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
                         <Typography variant="h3">{action} Agent</Typography>
@@ -113,6 +119,7 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
                             password: '',
                             email: '',
                             username: '',
+                            ...(isUserAdmin() ? { role_id: '' } : {}),
                             submit: null
                         }}
                         validationSchema={Yup.object().shape({
@@ -130,12 +137,13 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
                             language: Yup.string().max(255).required('Language is required'),
                             placeOfIssue: Yup.string().max(255).required('Place of Issue is required'),
                             workEmail: Yup.string().email('Must be a valid email').max(255).required('Work Email is required'),
+                            ...(isUserAdmin() ? { role_id: Yup.string().required('User Type is required') } : {})
                         })}
                         onSubmit={handleOnSubmit}
                     >
                         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                             <form noValidate onSubmit={handleSubmit}>
-                                <Grid container spacing={3} >
+                                <Grid container spacing={3}>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="name-signup">First Name*</InputLabel>
@@ -178,6 +186,31 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
                                             )}
                                         </Stack>
                                     </Grid>
+                                    {isUserAdmin() && (
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="role_id">User Type*</InputLabel>
+                                                <Select
+                                                    name="role_id"
+                                                    labelId="role_id"
+                                                    id="role_id"
+                                                    value={values.role_id}
+                                                    label="role_id"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    error={Boolean(touched.role_id && errors.role_id)}
+                                                >
+                                                    <MenuItem value="117">Client</MenuItem>
+                                                    <MenuItem value="118">Agent</MenuItem>
+                                                </Select>
+                                                {touched.role_id && errors.role_id && (
+                                                    <FormHelperText error id="helper-text-role_id-signup">
+                                                        {errors.role_id}
+                                                    </FormHelperText>
+                                                )}
+                                            </Stack>
+                                        </Grid>
+                                    )}
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="name-signup">Username*</InputLabel>
@@ -536,7 +569,7 @@ const AgentsForm = ({ toggleModal, action, refresh = () => { } }) => {
                                                 color="primary"
                                                 className="bg-primary"
                                             >
-                                                {action} Agent
+                                                {action} {isUserAdmin() ? 'Agent/Client' : 'Client'}
                                             </Button>
                                         </AnimateButton>
                                     </Grid>

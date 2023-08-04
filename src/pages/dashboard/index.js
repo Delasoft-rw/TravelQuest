@@ -9,8 +9,13 @@ import MonthlyBarChart from './MonthlyBarChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from '../../components/MainCard';
 import Analytics from '../../components/cards/statistics/Analytics';
+<<<<<<< HEAD
 import { axios } from 'utils/axios.interceptor';
 import { closeSnackbar, enqueueSnackbar } from 'utils/index';
+=======
+import { useNavigate } from 'react-router-dom';
+import { isUserAdmin } from 'utils/index';
+>>>>>>> 3501a0d8671d693473449b78910d48d46fc28662
 
 // sales report status
 const status = [
@@ -68,6 +73,13 @@ const DashboardDefault = () => {
 
     useEffect(() => {
         getData();
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(!isUserAdmin()) {
+            navigate('/dashboard/agents')
+            // console.log('not admin')
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
