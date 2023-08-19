@@ -35,7 +35,7 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/user
 import Popup from '../Modal/Modal';
 
 import { enqueueSnackbar } from 'notistack';
-import CelebrationsForm from 'pages/Celebrations/CelebrationsForm';
+import NotificationsForm from 'pages/Notifications/NotificationsForm';
 import { axios } from 'utils/axios.interceptor';
 import { isUserAdmin } from 'utils/index';
 
@@ -55,7 +55,7 @@ export default function List({
     onTableChange,
     refresh = () => { }
 }) {
-    const displaySourceType = source_type === 'agent' ? (isUserAdmin() ? 'agent' : 'client') : 'New Agent'
+    const displaySourceType = source_type === 'agent' ? (isUserAdmin() ? 'agent' : 'client') : source_type
 
     const [userList,] = useState(table_data);
 
@@ -197,8 +197,8 @@ export default function List({
                                 <FlightsForm action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : source_type === 'alert' ? (
                                 <AlertsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh} />
-                            ) : source_type === 'celebration' ? (
-                                <CelebrationsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh} />
+                            ) : source_type === 'notification' ? (
+                                <NotificationsForm action_label={add_label} currentTable={currentTable} action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : source_type === 'plane' ? (
                                 <PlanesForm action="Add" toggleModal={toggleModal} refresh={refresh} />
                             ) : null}

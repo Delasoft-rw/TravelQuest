@@ -1,7 +1,7 @@
 // assets
 import { FieldTimeOutlined, UserAddOutlined, TeamOutlined, AlertOutlined } from '@ant-design/icons';
 import { ReactComponent as PlaneIcon } from '../assets/images/icons/plane.svg';
-import { ReactComponent as CelebrationIcon } from '../assets/images/icons/celebration.svg';
+import { ReactComponent as NotificationIcon } from '../assets/images/icons/celebration.svg';
 import { isUserAdmin } from 'utils/index';
 
 // icons
@@ -11,7 +11,7 @@ const icons = {
     TeamOutlined,
     AlertOutlined,
     PlaneIcon,
-    CelebrationIcon
+    NotificationIcon
 };
 
 // ==============================|| MENU ITEMS - EXTRA PAGES ||============================== //
@@ -67,11 +67,11 @@ const pages = {
             // target: true
         },
         {
-            id: 'Celebrations',
-            title: 'Celebrations',
+            id: 'Notifications',
+            title: 'Notifications',
             type: 'item',
-            url: '/dashboard/celebrations',
-            icon: icons.CelebrationIcon,
+            url: '/dashboard/notifications',
+            icon: icons.NotificationIcon,
             breadcrumbs: false
             // target: true
         },

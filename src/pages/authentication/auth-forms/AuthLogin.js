@@ -54,11 +54,17 @@ const AuthLogin = () => {
             if (data.message !== 'success') throw new Error(data.message);
             localStorage.setItem('isAuthenticated', true);
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem(
+                'user',
+                JSON.stringify({
+                    ...data.user,
+                    isTravelQuest: true
+                })
+            );
             dispatch(setUserInfo({ userInfo: data.user }));
             enqueueSnackbar('Logged In Successfully', { variant: 'success' });
-            console.log(data)
-            window.location.pathname = '/'
+            console.log(data);
+            window.location.pathname = '/';
         } catch (err) {
             const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
             setStatus({ success: false });

@@ -4,7 +4,9 @@ import { axios } from './axios.interceptor';
 
 const getUserInfo = () => {
     try {
-        return JSON.parse(localStorage.getItem('user') ?? '{}');
+        const userInfo = JSON.parse(localStorage.getItem('user') ?? '{}')
+        // if(!userInfo.isTravelQuest && window.location.pathname !== '/login') return window.location.pathname = '/login'
+        return userInfo;
     } catch (error) {
         return {};
     }

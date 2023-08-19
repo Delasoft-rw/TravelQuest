@@ -27,10 +27,10 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import Iconify from 'components/Iconify';
 
 import { axios } from 'utils/axios.interceptor';
-import { closeSnackbar, enqueueSnackbar } from 'utils/index';
+import { closeSnackbar, enqueueSnackbar, getUserInfo, isUserAdmin } from 'utils/index';
 
 
-const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialData = {} }) => {
+const NotificationsForm = ({ toggleModal, action, refresh = () => { }, initialData = {} }) => {
   const [clients, setClients] = useState([])
 
   const getClients = async () => {
@@ -59,13 +59,27 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
   const onHandleSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
       setStatus({ success: false });
-      setSubmitting(false);
-      toggleModal();
+      setSubmitting(true);
+      enqueueSnackbar('Submitting...', { variant: 'info' });
+
+      const URL = action === 'Add' ? '/notification/send' : '/notification/edit/' + initialData.id
+      const method = action === 'Add' ? 'post' : 'put'
+      await axios[method](URL, {
+        ...values,
+        doneBy: getUserInfo().id,
+      });
+
+      enqueueSnackbar('Added Agent', { variant: 'success' });
     } catch (err) {
+      const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
       console.error(err);
       setStatus({ success: false });
-      setErrors({ submit: err.message });
+      setErrors({ submit: errMessage });
+      enqueueSnackbar(errMessage, { variant: 'error' });
+    } finally {
+      toggleModal();
       setSubmitting(false);
+      refresh();
     }
   }
 
@@ -79,20 +93,20 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
       <Grid spacing={3}>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 2 } }}>
-            <Typography variant="h3">{action} Celebration</Typography>
+            <Typography variant="h3">{action} Notification</Typography>
             <Typography onClick={toggleModal} variant="h3"><Iconify color="red" icon={'eva:close-circle-fill'} /></Typography>
           </Stack>
         </Grid>
         <Grid item xs={12}>
           <Formik
             initialValues={{
-              clientName: initialData.clientName ?? '',
+              phone_number: initialData.phone_number ?? '',
               // dateOfBirth: initialData.dateOfBirth ?? '',
               message: initialData.message ?? '',
               submit: null
             }}
             validationSchema={Yup.object().shape({
-              clientName: Yup.string().required('Client Name is required'),
+              phone_number: Yup.string().required('Client should be selected'),
               // dateOfBirth: Yup.string().required('Date of Birth is required'),
               message: Yup.string().required('Message is required')
             })}
@@ -103,22 +117,22 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="clientName-signup">Client Name*</InputLabel>
+                      <InputLabel htmlFor="phone_number-signup">Client*</InputLabel>
                       <Select
-                        id="clientName"
-                        name="clientName"
-                        value={values.clientName}
+                        id="phone_number"
+                        name="phone_number"
+                        value={values.phone_number}
                         onChange={handleChange}
                       >
                         {
                           clients.map((client, index) => (
-                            <MenuItem key={index} value={client.id}>{client.lastName} {client.firstName}</MenuItem>
+                            <MenuItem key={index} value={client.phone_number}>{client.lastName} {client.firstName}</MenuItem>
                           ))
                         }
                       </Select>
-                      {touched.clientName && errors.clientName && (
-                        <FormHelperText error id="helper-text-clientName-signup">
-                          {errors.clientName}
+                      {touched.phone_number && errors.phone_number && (
+                        <FormHelperText error id="helper-text-phone_number-signup">
+                          {errors.phone_number}
                         </FormHelperText>
                       )}
                     </Stack>
@@ -198,7 +212,7 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
                         className="bg-primary"
                         onClick={handleSubmit}
                       >
-                        {action} Celebration
+                        {action} Notification
                       </Button>
                     </AnimateButton>
                   </Grid>
@@ -212,4 +226,4 @@ const CelebrationsForm = ({ toggleModal, action, refresh = () => { }, initialDat
   );
 };
 
-export default CelebrationsForm;
+export default NotificationsForm;

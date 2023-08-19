@@ -8,7 +8,7 @@ import Clients from '../pages/Clients/Clients';
 import Flights from '../pages/Flights/Flights';
 import Alerts from '../pages/Alerts/Alerts';
 import Planes from '../pages/Planes/Planes';
-import Celebrations from '../pages/Celebrations/Celebrations';
+import Notifications from '../pages/Notifications/Notifications';
 import Account from '../pages/Account/Account';
 
 // render - dashboard
@@ -52,8 +52,8 @@ const MainRoutes = {
                     element: <Planes />
                 },
                 {
-                    path: 'Celebrations',
-                    element: <Celebrations />
+                    path: 'Notifications',
+                    element: <Notifications />
                 },
                 {
                     path: 'Account',
