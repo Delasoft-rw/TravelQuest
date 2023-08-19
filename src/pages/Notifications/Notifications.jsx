@@ -66,7 +66,7 @@ function Notifications() {
 
   let searchKey = 'fullName';
   const table_head = [
-    { id: 'Phone number', label: 'Phone Number', alignRight: false },
+    { id: 'phone_number', label: 'Phone Number', alignRight: false },
     // { id: 'DOB', label: 'Date', alignRight: false },
     { id: 'message', label: 'Template', alignRight: false },
     { id: 'doneBy', label: 'Done By', alignRight: false },

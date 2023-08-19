@@ -69,7 +69,7 @@ const NotificationsForm = ({ toggleModal, action, refresh = () => { }, initialDa
         doneBy: getUserInfo().id,
       });
 
-      enqueueSnackbar('Added Agent', { variant: 'success' });
+      enqueueSnackbar('Sent Notification', { variant: 'success' });
     } catch (err) {
       const errMessage = err.response ? err.response.data.error ?? err.message : 'Something Went Wrong';
       console.error(err);
@@ -126,7 +126,7 @@ const NotificationsForm = ({ toggleModal, action, refresh = () => { }, initialDa
                       >
                         {
                           clients.map((client, index) => (
-                            <MenuItem key={index} value={client.phone_number}>{client.lastName} {client.firstName}</MenuItem>
+                            <MenuItem key={index} value={client.mobileTelephone}>{client.lastName} {client.firstName}</MenuItem>
                           ))
                         }
                       </Select>
