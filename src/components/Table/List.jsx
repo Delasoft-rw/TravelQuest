@@ -130,6 +130,9 @@ export default function List({
             case 'alert':
                 deleteURI = currentTable === 'templates' ? `/template/delete-alert-template/${id}` : `/constant/delete-call-type/${id}`
                 break;
+            case 'notification':
+                deleteURI = `/notification/delete/${id}`
+                break;
             case 'Product':
                 deleteURI = `/product/delete/${id}`
                 break;

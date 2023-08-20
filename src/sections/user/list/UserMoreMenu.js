@@ -14,6 +14,7 @@ import AlertsForm from '../../../pages/Alerts/AlertsForm';
 import ClientsForm from '../../../pages/Clients/ClientsForm';
 import FlightsForm from '../../../pages/Flights/FlightsForm';
 import PlanesForm from '../../../pages/Planes/PlanesForm';
+import NotificationsForm from 'pages/Notifications/NotificationsForm';
 
 // ----------------------------------------------------------------------
 
@@ -96,6 +97,8 @@ export default function UserMoreMenu({ onDelete, rowInfo, source_type, edit_labe
                                 />
                             ) : source_type === 'plane' ? (
                                 <PlanesForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
+                            ) : source_type === 'notification' ? (
+                                <NotificationsForm action="Edit" toggleModal={toggleModal} initialData={rowInfo} refresh={refresh} />
                             ) : null}
                         </Popup>
                     </Link>
